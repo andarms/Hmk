@@ -1,7 +1,7 @@
 using Hmk.Engine.Core;
+using Hmk.Engine.Graphics;
+using Hmk.Engine.Resources;
 using Hmk.Engine.Scenes;
-using Raylib_cs;
-using static Raylib_cs.Raylib;
 
 namespace Hmk.Game.Scenes;
 
@@ -16,6 +16,16 @@ public class GameplayScene : Scene
     {
       Position = new(100, 100)
     };
+    Sprite sprite = new()
+    {
+      Texture = ResourceManager.Textures["Sprites/TinyDungeon"],
+      Source = new(16, 160, 16, 16)
+    };
+    SpriteRenderer spriteRenderer = new()
+    {
+      Sprite = sprite
+    };
+    test.AddChild(spriteRenderer);
     AddChild(test);
   }
 

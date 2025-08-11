@@ -11,4 +11,11 @@
     <ProjectReference Include="..\Hmk.Engine\Hmk.Engine.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="Data\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+
 </Project>

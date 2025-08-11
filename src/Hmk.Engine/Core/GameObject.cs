@@ -20,11 +20,20 @@ public class GameObject
 
   public GameObject() { }
 
-  public virtual void Initialize() { }
+  public virtual void Initialize()
+  {
+    Children.ForEach(child => child.Initialize());
+  }
 
-  public virtual void Update(float dt) { }
+  public virtual void Update(float dt)
+  {
+    Children.ForEach(child => child.Update(dt));
+  }
 
-  public virtual void Draw() { }
+  public virtual void Draw()
+  {
+    Children.ForEach(child => child.Draw());
+  }
 
   public virtual void Terminate() { }
 }

@@ -1,18 +1,23 @@
+
 using Hmk.Engine.Input;
+using Hmk.Engine.Resources;
 using Hmk.Engine.Scenes;
 
 namespace Hmk.Engine.Core;
 
 public class Game
 {
-  public static void Run()
+  public static void Initialize()
   {
     InitWindow(1280, 720, "Game");
     SetTargetFPS(60);
-
+    ResourceManager.Initialize();
     SceneManager.Initialize();
     InputMap.CreateDefault().Apply();
+  }
 
+  public static void Run()
+  {
     while (!WindowShouldClose())
     {
       BeginDrawing();
@@ -22,6 +27,7 @@ public class Game
       EndDrawing();
     }
 
+    ResourceManager.Terminate();
     CloseWindow();
   }
 }
