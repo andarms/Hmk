@@ -1,6 +1,6 @@
 using System.Xml.Linq;
 
-namespace Hmk.Engine.Resources;
+namespace Hmk.Engine.Serializer;
 
 public interface ISerializable
 {

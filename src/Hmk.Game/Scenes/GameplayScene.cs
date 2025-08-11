@@ -1,9 +1,11 @@
+using Hmk.Engine.Collision;
 using Hmk.Engine.Core;
 using Hmk.Engine.Graphics;
-using Hmk.Engine.Resources;
 using Hmk.Engine.Scenes;
+using Hmk.Engine.Serializer;
 
 namespace Hmk.Game.Scenes;
+
 
 public class GameplayScene : Scene
 {
@@ -18,7 +20,7 @@ public class GameplayScene : Scene
     };
     Sprite sprite = new()
     {
-      Texture = ResourceManager.Textures["Sprites/TinyDungeon"],
+      TextureName = "Sprites/TinyDungeon",
       Source = new(16, 160, 16, 16)
     };
     SpriteRenderer spriteRenderer = new()
@@ -26,17 +28,21 @@ public class GameplayScene : Scene
       Sprite = sprite
     };
     test.AddChild(spriteRenderer);
+    Collider collider = new()
+    {
+      Size = new(16, 16),
+      Offset = new(0, 0)
+    };
+    test.SetCollider(collider);
     AddChild(test);
+    Console.WriteLine(sprite.Serialize());
+    Console.WriteLine(test.Serialize());
   }
+
 
   public override void Update(float dt)
   {
     base.Update(dt);
-  }
-
-  public override void Draw()
-  {
-    base.Draw();
-    DrawText("Gameplay Scene", 10, 10, 20, Color.White);
+    // Update logic for the gameplay scene
   }
 }

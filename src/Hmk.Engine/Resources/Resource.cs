@@ -1,16 +1,19 @@
 using System.Xml.Linq;
+using Hmk.Engine.Serializer;
 
 namespace Hmk.Engine.Resources;
 
 public abstract class Resource : ISerializable
 {
-  public void Deserialize(XElement element)
+  public virtual void Deserialize(XElement element)
   {
-    throw new NotImplementedException();
+
   }
 
-  public XElement Serialize()
+  public virtual XElement Serialize()
   {
-    throw new NotImplementedException();
+    XElement element = new("Resource");
+    element.SetAttributeValue("Type", GetType().FullName);
+    return element;
   }
 }

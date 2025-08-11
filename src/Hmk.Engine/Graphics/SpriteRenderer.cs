@@ -1,12 +1,13 @@
 using System.Numerics;
 using Hmk.Engine.Core;
+using Hmk.Engine.Resources;
 
 namespace Hmk.Engine.Graphics;
 
 public class SpriteRenderer : GameObject
 {
   public Sprite Sprite { get; set; } = null!;
-
+  Texture2D Texture => ResourceManager.Textures[Sprite.TextureName];
 
   private Rectangle cachedDestination;
   private Vector2 lastGlobalPosition;
@@ -14,6 +15,10 @@ public class SpriteRenderer : GameObject
   public override void Initialize()
   {
     ArgumentNullException.ThrowIfNull(Sprite, nameof(Sprite));
+    if (string.IsNullOrEmpty(Sprite.TextureName) || !ResourceManager.Textures.ContainsKey(Sprite.TextureName))
+    {
+      throw new ArgumentException("Sprite must have a valid TextureName.", nameof(Sprite));
+    }
   }
 
   public Rectangle GetDestination()
@@ -28,6 +33,6 @@ public class SpriteRenderer : GameObject
 
   public override void Draw()
   {
-    DrawTexturePro(Sprite.Texture, Sprite.Source, GetDestination(), Sprite.Anchor, Sprite.Rotation, Sprite.Tint);
+    DrawTexturePro(Texture, Sprite.Source, GetDestination(), Sprite.Anchor, Sprite.Rotation, Sprite.Tint);
   }
 }
