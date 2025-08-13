@@ -16,4 +16,7 @@
       </Resource>
     </GameObject>
   </Children>
+  <Traits>
+    <Trait Type="IsSolid" />
+  </Traits>
 </GameObject>

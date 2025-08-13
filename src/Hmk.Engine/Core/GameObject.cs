@@ -34,6 +34,7 @@ public class GameObject
   public virtual void Draw()
   {
     Children.ForEach(child => child.Draw());
+    this.DebugCollider();
   }
 
   public virtual void Terminate() { }

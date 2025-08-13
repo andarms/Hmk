@@ -1,8 +1,8 @@
-<GameObject Type="Hmk.Engine.Core.GameObject">
+<GameObject Type="Hmk.Engine.Collision.DynamicObject">
   <Position X="10" Y="100" />
   <Collider>
-    <Size X="16" Y="16" />
-    <Offset X="0" Y="0" />
+    <Size X="8" Y="8" />
+    <Offset X="4" Y="8" />
   </Collider>
   <Children>
     <GameObject Type="Hmk.Engine.Graphics.SpriteRenderer">
@@ -17,7 +17,10 @@
     </GameObject>
     <GameObject Type="Hmk.Game.Components.Player.PlayerMovement">
       <Position X="0" Y="0" />
-      <Speed>60</Speed>
+      <Speed>100</Speed>
     </GameObject>
   </Children>
+  <Traits>
+    <Trait Type="IsSolid" />
+  </Traits>
 </GameObject>

@@ -7,7 +7,6 @@ using Hmk.Game.Components.Player;
 
 namespace Hmk.Game.Scenes;
 
-
 public class GameplayScene : Scene
 {
   public override Color BackgroundColor => Color.DarkGreen;
@@ -17,7 +16,7 @@ public class GameplayScene : Scene
   {
     base.Initialize();
 
-    // GameObject player = new() { Position = new(10, 100) };
+    // DynamicObject player = new() { Position = new(10, 100) };
     // Sprite sprite = new()
     // {
     //   TextureName = "Sprites/TinyDungeon",
@@ -30,15 +29,13 @@ public class GameplayScene : Scene
     // player.AddChild(spriteRenderer);
     // Collider collider = new()
     // {
-    //   Size = new(16, 16),
-    //   Offset = new(0, 0)
+    //   Size = new(8),
+    //   Offset = new(4, 8)
     // };
     // player.SetCollider(collider);
-    // player.AddChild(new PlayerMovement()
-    // {
-    //   Speed = 60f
-    // });
+    // player.AddChild(new PlayerMovement());
     // AddChild(player);
+    // player.AddTrait(new IsSolid());
     // Console.WriteLine(player.Serialize());
 
     var player = GameObjectSerializerExtensions.LoadFromXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Data\Objects\player.xml"));

@@ -1,4 +1,5 @@
 
+using Hmk.Engine.Collision;
 using Hmk.Engine.Input;
 using Hmk.Engine.Resources;
 using Hmk.Engine.Scenes;
@@ -13,6 +14,7 @@ public class Game
     SetTargetFPS(60);
     ResourceManager.Initialize();
     SceneManager.Initialize();
+    CollisionsManager.Initialize();
     InputMap.CreateDefault().Apply();
   }
 
@@ -20,14 +22,25 @@ public class Game
   {
     while (!WindowShouldClose())
     {
-      BeginDrawing();
-      float dt = GetFrameTime();
-      SceneManager.Update(dt);
-      SceneManager.Draw();
-      EndDrawing();
+      Update();
+      Draw();
     }
 
     ResourceManager.Terminate();
     CloseWindow();
+  }
+
+  private static void Draw()
+  {
+    BeginDrawing();
+    SceneManager.Draw();
+    EndDrawing();
+  }
+
+  private static void Update()
+  {
+    float dt = GetFrameTime();
+    CollisionsManager.Update();
+    SceneManager.Update(dt);
   }
 }

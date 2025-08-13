@@ -1,4 +1,5 @@
 using System.Numerics;
+using Hmk.Engine.Collision;
 using Hmk.Engine.Core;
 using Hmk.Engine.Input;
 using Hmk.Engine.Serializer;
@@ -7,6 +8,9 @@ namespace Hmk.Game.Components.Player;
 
 public class PlayerMovement : GameObject
 {
+
+  public new DynamicObject? Parent => base.Parent as DynamicObject;
+
   [Save]
   public float Speed { get; set; } = 100f;
 
@@ -43,7 +47,7 @@ public class PlayerMovement : GameObject
     }
     var velocity = direction * currentSpeed * dt;
 
-    Parent.Position += velocity;
-    // player.Move(velocity);
+    // Parent.Position += velocity;
+    Parent.Move(velocity);
   }
 }

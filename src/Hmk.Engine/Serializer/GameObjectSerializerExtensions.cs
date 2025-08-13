@@ -97,7 +97,7 @@ public static class GameObjectSerializerExtensions
     var colliderElement = element.Element("Collider");
     if (colliderElement != null)
     {
-      gameObject.Collider = colliderElement.ToCollider();
+      gameObject.SetCollider(colliderElement.ToCollider());
     }
 
 
