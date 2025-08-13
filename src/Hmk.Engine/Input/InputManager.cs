@@ -1,3 +1,5 @@
+using System.Numerics;
+
 namespace Hmk.Engine.Input;
 
 /// <summary>
@@ -61,6 +63,33 @@ public static class InputManager
 
   public static bool JustReleased(string action, int gamepad = 0)
     => IsReleased(action, gamepad);
+
+
+  public static Vector2 GetVector(string negativeXAction, string positiveXAction, string negativeYAction, string positiveYAction, int gamepad = 0)
+  {
+    float x = 0;
+    float y = 0;
+
+    if (IsHeld(positiveXAction, gamepad))
+      x += 1;
+    if (IsHeld(negativeXAction, gamepad))
+      x -= 1;
+    if (IsHeld(positiveYAction, gamepad))
+      y += 1;
+    if (IsHeld(negativeYAction, gamepad))
+      y -= 1;
+
+    return new Vector2(x, y);
+  }
+
+  /// <summary>
+  /// Get the current value of the gamepad left stick.
+  /// </summary>
+  public static Vector2 GetGamepadLeftStick(int gamepad = 0)
+  {
+    // Implementation for getting the gamepad left stick value
+    return Vector2.Zero;
+  }
 
   /// <summary>
   /// Clear all actions.

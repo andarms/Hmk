@@ -14,6 +14,11 @@ public class Scene
 
   public virtual Color BackgroundColor { get; } = Color.Black;
 
+  public Camera2D Camera { get; } = new()
+  {
+    Zoom = 3.0f,
+  };
+
 
   public bool IsActive { get; protected set; } = true;
   public bool IsPaused { get; protected set; } = false;

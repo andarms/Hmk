@@ -3,6 +3,7 @@ using Hmk.Engine.Core;
 using Hmk.Engine.Graphics;
 using Hmk.Engine.Scenes;
 using Hmk.Engine.Serializer;
+using Hmk.Game.Components.Player;
 
 namespace Hmk.Game.Scenes;
 
@@ -11,39 +12,47 @@ public class GameplayScene : Scene
 {
   public override Color BackgroundColor => Color.DarkGreen;
 
+
   public override void Initialize()
   {
     base.Initialize();
-    // GameObject test = new()
-    // {
-    //   Position = new(100, 100)
-    // };
+
+    // GameObject player = new() { Position = new(10, 100) };
     // Sprite sprite = new()
     // {
     //   TextureName = "Sprites/TinyDungeon",
-    //   Source = new(16, 160, 16, 16)
+    //   Source = new(16, 112, 16, 16)
     // };
     // SpriteRenderer spriteRenderer = new()
     // {
     //   Sprite = sprite
     // };
-    // test.AddChild(spriteRenderer);
+    // player.AddChild(spriteRenderer);
     // Collider collider = new()
     // {
     //   Size = new(16, 16),
     //   Offset = new(0, 0)
     // };
-    // test.SetCollider(collider);
-    // AddChild(test);
+    // player.SetCollider(collider);
+    // player.AddChild(new PlayerMovement()
+    // {
+    //   Speed = 60f
+    // });
+    // AddChild(player);
+    // Console.WriteLine(player.Serialize());
 
+    var player = GameObjectSerializerExtensions.LoadFromXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Data\Objects\player.xml"));
+    AddChild(player);
     var obj = GameObjectSerializerExtensions.LoadFromXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Data\Objects\ghost.xml"));
     AddChild(obj);
   }
 
 
-  public override void Update(float dt)
+  public override void Draw()
   {
-    base.Update(dt);
+    BeginMode2D(Camera);
+    base.Draw();
+    EndMode2D();
     // Update logic for the gameplay scene
   }
 }

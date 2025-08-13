@@ -143,16 +143,16 @@ public class InputMap
   {
     return new InputMap()
         // Movement actions
-        .AddAction("up")
+        .AddAction("move_up")
             .WithKeys(KeyboardKey.W, KeyboardKey.Up)
             .WithGamepadButton(GamepadButton.LeftFaceUp)
-        .AddAction("down")
+        .AddAction("move_down")
             .WithKeys(KeyboardKey.S, KeyboardKey.Down)
             .WithGamepadButton(GamepadButton.LeftFaceDown)
-        .AddAction("left")
+        .AddAction("move_left")
             .WithKeys(KeyboardKey.A, KeyboardKey.Left)
             .WithGamepadButton(GamepadButton.LeftFaceLeft)
-        .AddAction("right")
+        .AddAction("move_right")
             .WithKeys(KeyboardKey.D, KeyboardKey.Right)
             .WithGamepadButton(GamepadButton.LeftFaceRight)
 
