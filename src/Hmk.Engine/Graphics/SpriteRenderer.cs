@@ -1,14 +1,16 @@
 using System.Numerics;
 using Hmk.Engine.Core;
 using Hmk.Engine.Resources;
+using Hmk.Engine.Serializer;
 
 namespace Hmk.Engine.Graphics;
 
 public class SpriteRenderer : GameObject
 {
+  [Save]
   public Sprite Sprite { get; set; } = null!;
-  Texture2D Texture => ResourceManager.Textures[Sprite.TextureName];
 
+  private Texture2D Texture => ResourceManager.Textures[Sprite.TextureName];
   private Rectangle cachedDestination;
   private Vector2 lastGlobalPosition;
 

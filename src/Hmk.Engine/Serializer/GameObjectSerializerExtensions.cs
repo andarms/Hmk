@@ -3,23 +3,37 @@ using System.Numerics;
 using System.Xml.Linq;
 using Hmk.Engine.Collision;
 using Hmk.Engine.Core;
-using Hmk.Engine.Graphics;
 
 namespace Hmk.Engine.Serializer;
 
 public static class GameObjectSerializerExtensions
 {
-  // Note: For value types (Vector2, Rectangle, Color, primitives) prefer ToX() to return a value
-  // rather than mutating by-ref, since extension methods on value types receive a copy.
   public static XElement Serialize(this GameObject gameObject)
   {
     XElement element = new("GameObject");
     element.SetAttributeValue("Type", gameObject.GetType().FullName);
+    if (!string.IsNullOrEmpty(gameObject.Name))
+    {
+      element.SetAttributeValue("Name", gameObject.Name);
+    }
     element.Add(gameObject.Position.Serialize("Position"));
 
     if (gameObject.Collider != null)
     {
       element.Add(gameObject.Collider.Serialize("Collider"));
+    }
+
+    var members = gameObject.GetType().GetProperties()
+        .Where(prop => Attribute.IsDefined(prop, typeof(SaveAttribute)));
+
+
+    if (members.Any())
+    {
+      foreach (var member in members)
+      {
+        XElement memberElement = MemberSerializer.Serialize(member, member.GetValue(gameObject));
+        element.Add(memberElement);
+      }
     }
 
     if (gameObject.Children.Count > 0)

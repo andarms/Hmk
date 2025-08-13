@@ -5,6 +5,7 @@ namespace Hmk.Engine.Core;
 
 public class GameObject
 {
+  public string Name { get; set; } = string.Empty;
   public Vector2 Position { get; set; }
   public Collider? Collider { get; set; } = null;
 

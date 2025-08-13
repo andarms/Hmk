@@ -35,8 +35,6 @@ public class GameplayScene : Scene
     };
     test.SetCollider(collider);
     AddChild(test);
-    Console.WriteLine(sprite.Serialize());
-    Console.WriteLine(test.Serialize());
   }
 
 
