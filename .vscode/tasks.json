@@ -40,6 +40,20 @@
 				"$msbuild"
 			],
 			"group": "build"
+		},
+		{
+			"label": "build",
+			"type": "shell",
+			"command": "dotnet build Hmk.sln -v minimal",
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "build",
+			"type": "shell",
+			"command": "dotnet build Hmk.sln -v minimal",
+			"isBackground": false,
+			"group": "build"
 		}
 	]
 }

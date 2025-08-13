@@ -7,20 +7,15 @@ namespace Hmk.Engine.Graphics;
 
 public class Sprite() : Resource
 {
+  [Save]
   public string TextureName { get; set; } = string.Empty;
+  [Save]
   public Rectangle Source { get; set; }
+  [Save]
   public Vector2 Anchor { get; set; } = new Vector2(0, 0);
+  [Save]
   public Color Tint { get; set; } = Color.White;
+  [Save]
   public float Rotation { get; set; } = 0;
 
-  public override XElement Serialize()
-  {
-    var element = base.Serialize();
-    element.Add(new XElement("TextureName", TextureName));
-    element.Add(Source.Serialize("Source"));
-    element.Add(Anchor.Serialize("Anchor"));
-    element.Add(Tint.Serialize("Tint"));
-    element.Add(Rotation.Serialize("Rotation"));
-    return element;
-  }
 }

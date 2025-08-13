@@ -3,11 +3,28 @@ using System.Numerics;
 using System.Xml.Linq;
 using Hmk.Engine.Collision;
 using Hmk.Engine.Core;
+using Hmk.Engine.Resources;
 
 namespace Hmk.Engine.Serializer;
 
 public static class GameObjectSerializerExtensions
 {
+  public static GameObject LoadFromXElement(XElement element)
+  {
+    ArgumentNullException.ThrowIfNull(element);
+    var instance = CreateGameObjectFromElement(element) ?? new GameObject();
+    instance.Deserialize(element);
+    return instance;
+  }
+
+  public static GameObject LoadFromXml(string filePath)
+  {
+    ArgumentNullException.ThrowIfNull(filePath);
+    var doc = XDocument.Load(filePath);
+    var root = doc.Root ?? throw new InvalidOperationException("XML has no root element");
+    return LoadFromXElement(root);
+  }
+
   public static XElement Serialize(this GameObject gameObject)
   {
     XElement element = new("GameObject");
@@ -63,6 +80,13 @@ public static class GameObjectSerializerExtensions
   {
     ArgumentNullException.ThrowIfNull(element);
 
+    // Basic attributes
+    var nameAttr = element.Attribute("Name")?.Value;
+    if (!string.IsNullOrWhiteSpace(nameAttr))
+    {
+      gameObject.Name = nameAttr!;
+    }
+
     var positionElement = element.Element("Position");
     if (positionElement != null)
     {
@@ -76,6 +100,9 @@ public static class GameObjectSerializerExtensions
       gameObject.Collider = colliderElement.ToCollider();
     }
 
+
+    // [Save] properties on this GameObject
+    DeserializeSavedProperties(gameObject, element);
 
     var childrenElement = element.Element("Children");
     if (childrenElement != null)
@@ -201,6 +228,99 @@ public static class GameObjectSerializerExtensions
     var t = ResolveType(typeAttr, typeof(GameObject));
     if (t == null) return new GameObject();
     return Activator.CreateInstance(t) as GameObject;
+  }
+
+  private static Resource? CreateResourceFromElement(XElement element)
+  {
+    var typeAttr = element.Attribute("Type")?.Value;
+    if (string.IsNullOrWhiteSpace(typeAttr)) return null;
+
+    var t = ResolveType(typeAttr, typeof(Resource));
+    if (t == null) return null;
+    return Activator.CreateInstance(t) as Resource;
+  }
+
+  private static void DeserializeSavedProperties(GameObject gameObject, XElement parent)
+  {
+    var members = gameObject.GetType().GetProperties()
+      .Where(prop => Attribute.IsDefined(prop, typeof(SaveAttribute)) && prop.CanWrite);
+
+    foreach (var member in members)
+    {
+      // Two possible encodings:
+      // 1) Primitive/struct types: element name equals property name
+      // 2) Complex types (GameObject/Resource): element with attribute Property=property name
+      var el = parent.Element(member.Name)
+               ?? parent.Elements().FirstOrDefault(e => string.Equals(e.Attribute("Property")?.Value, member.Name, StringComparison.Ordinal));
+
+      if (el == null) continue;
+
+      var targetType = member.PropertyType;
+      object? value = DeserializeValueForType(targetType, el);
+      if (value != null || targetType.IsClass)
+      {
+        try { member.SetValue(gameObject, value); }
+        catch { /* ignore assignment failures */ }
+      }
+    }
+  }
+
+  private static object? DeserializeValueForType(Type targetType, XElement element)
+  {
+    if (targetType == typeof(string))
+    {
+      return element.Value;
+    }
+    if (targetType == typeof(int))
+    {
+      return int.TryParse(element.Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var i) ? i : 0;
+    }
+    if (targetType == typeof(float))
+    {
+      return float.TryParse(element.Value, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var f) ? f : 0f;
+    }
+    if (targetType == typeof(Vector2))
+    {
+      return element.ToVector2();
+    }
+    if (targetType == typeof(Rectangle))
+    {
+      return element.ToRectangle();
+    }
+    if (targetType == typeof(Color))
+    {
+      return element.ToColor();
+    }
+    if (typeof(GameObject).IsAssignableFrom(targetType))
+    {
+      // Expecting <GameObject Type="..." Property="...">...
+      var child = CreateGameObjectFromElement(element) ?? Activator.CreateInstance(targetType) as GameObject;
+      if (child != null)
+      {
+        child.Deserialize(element);
+      }
+      return child;
+    }
+    if (typeof(Resource).IsAssignableFrom(targetType))
+    {
+      // Expecting <Resource Type="..." Property="...">...
+      var res = CreateResourceFromElement(element) ?? Activator.CreateInstance(targetType) as Resource;
+      if (res != null)
+      {
+        res.Deserialize(element);
+      }
+      return res;
+    }
+
+    // Fallback: try ChangeType from string
+    try
+    {
+      return Convert.ChangeType(element.Value, targetType, CultureInfo.InvariantCulture);
+    }
+    catch
+    {
+      return null;
+    }
   }
 
   private static Type? ResolveType(string nameOrFullName, Type? mustInherit = null)
