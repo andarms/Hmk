@@ -1,4 +1,4 @@
-<GameObject Type="Hmk.Engine.Core.GameObject">
+<GameObject Type="Hmk.Engine.Core.GameObject" Name="Ghost">
   <Position X="100" Y="100" />
   <Collider>
     <Size X="16" Y="16" />

@@ -25,9 +25,12 @@ public static class CollisionsManager
 
   public static void AddObject(GameObject obj)
   {
-    objects.Add(obj);
-    lastKnownCollisionBounds[obj] = obj.Bounds();
-    Grid.AddObject(obj);
+    if (!objects.Contains(obj))
+    {
+      objects.Add(obj);
+      lastKnownCollisionBounds[obj] = obj.Bounds();
+      Grid.AddObject(obj);
+    }
   }
 
   public static void RemoveObject(GameObject obj)
@@ -42,6 +45,7 @@ public static class CollisionsManager
   public static void Update()
   {
     UpdateGrid();
+    CheckCollisions();
   }
 
 
@@ -50,9 +54,14 @@ public static class CollisionsManager
     var objectsToUpdate = new List<(GameObject obj, Rectangle oldBounds)>();
     foreach (var obj in objects)
     {
-      if (lastKnownCollisionBounds.TryGetValue(obj, out var lastKnownBounds) && lastKnownBounds.Equals(obj.Bounds()))
+      if (lastKnownCollisionBounds.TryGetValue(obj, out var lastKnownBounds))
       {
-        objectsToUpdate.Add((obj, lastKnownBounds));
+        var current = obj.Bounds();
+        // Update spatial cell only when bounds have changed
+        if (!lastKnownBounds.Equals(current))
+        {
+          objectsToUpdate.Add((obj, lastKnownBounds));
+        }
       }
     }
 
@@ -60,6 +69,44 @@ public static class CollisionsManager
     {
       Grid.UpdateObject(obj);
       lastKnownCollisionBounds[obj] = obj.Bounds();
+    }
+  }
+
+
+  public static void CheckCollisions()
+  {
+    var checkedPairs = new HashSet<(GameObject, GameObject)>();
+    foreach (var objA in objects.ToList())
+    {
+      foreach (var objB in Grid.GetPotentialCollisions(objA))
+      {
+        var pair = objA.GetHashCode() < objB.GetHashCode() ? (objA, objB) : (objB, objA);
+        if (checkedPairs.Contains(pair)) { continue; }
+        checkedPairs.Add(pair);
+
+        bool wasColliding = objA.Collisions.Contains(objB);
+        bool isColliding = objA.Collides(objB);
+
+        TriggerZone? zoneA = objA.Trait<HasTriggerZone>()?.Zone;
+        TriggerZone? zoneB = objB.Trait<HasTriggerZone>()?.Zone;
+
+        if (isColliding && !wasColliding)
+        {
+          objA.Collisions.Add(objB);
+          objB.Collisions.Add(objA);
+
+          zoneA?.OnEnter.Emit(objB);
+          zoneB?.OnEnter.Emit(objA);
+          // HandleCollisionPickup(objA, objB);
+        }
+        else if (!isColliding && wasColliding)
+        {
+          objA.Collisions.Remove(objB);
+          objB.Collisions.Remove(objA);
+          zoneA?.OnExit.Emit(objB);
+          zoneB?.OnExit.Emit(objA);
+        }
+      }
     }
   }
 

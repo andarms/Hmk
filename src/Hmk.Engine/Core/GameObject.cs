@@ -8,6 +8,7 @@ public class GameObject
   public string Name { get; set; } = string.Empty;
   public Vector2 Position { get; set; }
   public Collider? Collider { get; set; } = null;
+  public List<GameObject> Collisions { get; } = [];
 
   public GameObject? Parent { get; set; } = null;
   public List<GameObject> Children { get; } = [];

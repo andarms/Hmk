@@ -1,4 +1,4 @@
-<GameObject Type="Hmk.Engine.Collision.DynamicObject">
+<GameObject Type="Hmk.Engine.Collision.DynamicObject" Name="Player">
   <Position X="10" Y="100" />
   <Collider>
     <Size X="8" Y="8" />
@@ -18,6 +18,18 @@
     <GameObject Type="Hmk.Game.Components.Player.PlayerMovement">
       <Position X="0" Y="0" />
       <Speed>100</Speed>
+    </GameObject>
+    <GameObject Type="Hmk.Engine.Systems.Attack.Hurtbox">
+      <Position X="0" Y="0" />
+      <Collider>
+        <Size X="8" Y="8" />
+        <Offset X="4" Y="8" />
+      </Collider>
+      <Resource Type="Hmk.Engine.Systems.Attack.Health" Property="Health">
+        <Max>100</Max>
+        <Current>100</Current>
+      </Resource>
+      <Resource Type="Hmk.Engine.Collision.TriggerZone" Property="Zone" />
     </GameObject>
   </Children>
   <Traits>

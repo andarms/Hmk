@@ -9,8 +9,10 @@ public class SpatialGrid(int cellSize, int width, int height)
   public void AddObject(GameObject obj)
   {
     if (obj.Collider == null) return;
-    int cellX = (int)(obj.Position.X / cellSize);
-    int cellY = (int)(obj.Position.Y / cellSize);
+    // Use global top-left of the collider (accounts for parent transforms and offset)
+    var topLeft = obj.GlobalPosition + obj.Collider.Offset;
+    int cellX = (int)(topLeft.X / cellSize);
+    int cellY = (int)(topLeft.Y / cellSize);
 
     if (cellX < 0 || cellX >= grid.GetLength(0) || cellY < 0 || cellY >= grid.GetLength(1)) return;
 
@@ -22,8 +24,11 @@ public class SpatialGrid(int cellSize, int width, int height)
 
   public void RemoveObject(GameObject obj)
   {
-    int cellX = (int)(obj.Position.X / cellSize);
-    int cellY = (int)(obj.Position.Y / cellSize);
+    var topLeft = (obj.Collider != null)
+      ? obj.GlobalPosition + obj.Collider.Offset
+      : obj.GlobalPosition;
+    int cellX = (int)(topLeft.X / cellSize);
+    int cellY = (int)(topLeft.Y / cellSize);
 
     if (cellX < 0 || cellX >= grid.GetLength(0) || cellY < 0 || cellY >= grid.GetLength(1)) return;
 
@@ -38,8 +43,11 @@ public class SpatialGrid(int cellSize, int width, int height)
 
   public IEnumerable<GameObject> GetPotentialCollisions(GameObject obj)
   {
-    int cellX = (int)(obj.Position.X / cellSize);
-    int cellY = (int)(obj.Position.Y / cellSize);
+    var topLeft = (obj.Collider != null)
+      ? obj.GlobalPosition + obj.Collider.Offset
+      : obj.GlobalPosition;
+    int cellX = (int)(topLeft.X / cellSize);
+    int cellY = (int)(topLeft.Y / cellSize);
 
     if (cellX < 0 || cellX >= grid.GetLength(0) || cellY < 0 || cellY >= grid.GetLength(1)) yield break;
 
