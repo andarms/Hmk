@@ -8,11 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Hmk.Engine\Hmk.Engine.csproj" />
+    <ProjectReference Include="../Hmk.Engine/Hmk.Engine.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Data\**\*">
+    <Content Include="Data/**/*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

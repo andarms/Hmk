@@ -38,9 +38,9 @@ public class GameplayScene : Scene
     // player.AddTrait(new IsSolid());
     // Console.WriteLine(player.Serialize());
 
-    var player = GameObjectSerializerExtensions.LoadFromXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Data\Objects\player.xml"));
+    var player = GameObjectSerializerExtensions.LoadFromXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Objects/player.xml"));
     AddChild(player);
-    var obj = GameObjectSerializerExtensions.LoadFromXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Data\Objects\ghost.xml"));
+    var obj = GameObjectSerializerExtensions.LoadFromXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Objects/ghost.xml"));
     AddChild(obj);
   }
 
