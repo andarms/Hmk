@@ -51,34 +51,11 @@ public class GameplayScene : Scene
     // player.AddChild(hurtbox);
     // player.AddTrait(new HasInventory());
     // Console.WriteLine(player.Serialize());
-
-    GameObject window = new()
-    {
-      Position = new(0, 0),
-    };
-    NinePatchSprite ninePatch = new()
-    {
-      TextureName = "Sprites/Inventory/Window",
-      Source = new(0, 0, 19, 19),
-      Left = 7,
-      Top = 7,
-      Right = 7,
-      Bottom = 7,
-      Anchor = new(0),
-      Tint = Color.White
-    };
-    SpriteRenderer spriteRenderer = new()
-    {
-      Sprite = ninePatch,
-      Size = new(100, 100)
-    };
-    window.AddChild(spriteRenderer);
-    AddChild(window);
-
-
+    InventoryWindow inventoryWindow = new();
+    AddChild(inventoryWindow);
 
     var player2 = GameObjectSerializerExtensions.LoadFromXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Objects/player.xml"));
-    AddChild(player2);
+    AddChild(player2, UILayer);
 
     var obj = GameObjectSerializerExtensions.LoadFromXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Objects/ghost.xml"));
     AddChild(obj);
@@ -88,6 +65,17 @@ public class GameplayScene : Scene
 
     var sword = GameObjectSerializerExtensions.LoadFromXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Objects/Collectables/sword.xml"));
     AddChild(sword);
+
+    HasInventory? i = player2.Trait<HasInventory>();
+    i?.Inventory?.OnItemAdded.Connect((_) =>
+    {
+      inventoryWindow.UpdateInventory(i.Inventory);
+    });
+    i?.Inventory.OnItemRemoved.Connect((_) =>
+    {
+      inventoryWindow.UpdateInventory(i.Inventory);
+    });
+
   }
 
 

@@ -9,7 +9,7 @@ public class Scene
   public const string DefaultLayerName = "Default";
   public const string BackgroundLayerName = "Background";
   public const string ForegroundLayerName = "Foreground";
-  public const string UIOverlayLayer = "UIOverlay";
+  public const string UILayer = "UIOverlay";
 
 
   public virtual Color BackgroundColor { get; } = Color.Black;
@@ -29,11 +29,11 @@ public class Scene
     layers.Add(defaultLayer.Name, defaultLayer);
     sortedLayers.Add(defaultLayer.Name);
 
-    layers.Add(UIOverlayLayer, new ObjectLayer(UIOverlayLayer)
+    layers.Add(UILayer, new ObjectLayer(UILayer)
     {
-      Priority = LayerPriority.UIOverlay
+      Priority = LayerPriority.UI
     });
-    sortedLayers.Add(UIOverlayLayer);
+    sortedLayers.Add(UILayer);
   }
 
   #region Child Management
@@ -44,7 +44,7 @@ public class Scene
       layer = new ObjectLayer(layerName);
       layers[layerName] = layer;
       sortedLayers.Add(layerName);
-      sortedLayers.Sort((a, b) => layers[a].Priority.CompareTo(layers[b].Priority));
+      sortedLayers.Sort((a, b) => layers[a].Priority > layers[b].Priority ? 1 : -1);
     }
     child.Initialize();
     layer.Instances.Add(child);
