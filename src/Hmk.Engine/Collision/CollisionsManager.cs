@@ -1,4 +1,5 @@
 using Hmk.Engine.Core;
+using Hmk.Engine.Systems.Inventory;
 
 namespace Hmk.Engine.Collision;
 
@@ -97,7 +98,7 @@ public static class CollisionsManager
 
           zoneA?.OnEnter.Emit(objB);
           zoneB?.OnEnter.Emit(objA);
-          // HandleCollisionPickup(objA, objB);
+          HandleCollectables(objA, objB);
         }
         else if (!isColliding && wasColliding)
         {
@@ -107,6 +108,30 @@ public static class CollisionsManager
           zoneB?.OnExit.Emit(objA);
         }
       }
+    }
+  }
+
+
+  private static void HandleCollectables(GameObject objA, GameObject objB)
+  {
+    CanBeCollected? CanBeCollectedTraitA = objA.Trait<CanBeCollected>();
+    CanBeCollected? CanBeCollectedTraitB = objB.Trait<CanBeCollected>();
+    HasInventory? inventoryA = objA.Trait<HasInventory>();
+    HasInventory? inventoryB = objB.Trait<HasInventory>();
+
+    if (CanBeCollectedTraitA == null && CanBeCollectedTraitB == null) return;
+
+    if (CanBeCollectedTraitA != null && CanBeCollectedTraitA.AutoCollectionAllowed && CanBeCollectedTraitA.Item != null)
+    {
+      inventoryB?.Inventory.AddItem(CanBeCollectedTraitA.Item);
+      RemoveObject(objA);
+      objA.Terminate();
+    }
+    else if (CanBeCollectedTraitB != null && CanBeCollectedTraitB.AutoCollectionAllowed && CanBeCollectedTraitB.Item != null)
+    {
+      inventoryA?.Inventory.AddItem(CanBeCollectedTraitB.Item);
+      RemoveObject(objB);
+      objB.Terminate();
     }
   }
 

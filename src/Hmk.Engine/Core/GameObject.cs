@@ -38,5 +38,16 @@ public class GameObject
     this.DebugCollider();
   }
 
-  public virtual void Terminate() { }
+  public virtual void Terminate()
+  {
+    Children.ForEach(child => child.Terminate());
+    Children.Clear();
+    Traits.Clear();
+    Parent = null;
+    if (Collider != null)
+    {
+      Collider = null;
+      CollisionsManager.RemoveObject(this);
+    }
+  }
 }

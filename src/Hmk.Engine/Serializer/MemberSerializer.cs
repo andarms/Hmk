@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Numerics;
 using System.Reflection;
 using System.Xml.Linq;
@@ -16,6 +17,43 @@ public static class MemberSerializer
     if (value is null)
     {
       return new XElement(memberName);
+    }
+
+    // Handle lists/collections (but not string)
+    if (value is IEnumerable enumerable && value is not string && value is not GameObject && value is not Resource)
+    {
+      var parent = new XElement(memberName);
+      foreach (var item in enumerable)
+      {
+        if (item is null)
+        {
+          parent.Add(new XElement("Item"));
+          continue;
+        }
+
+        switch (item)
+        {
+          case GameObject go:
+            parent.Add(go.Serialize());
+            break;
+          case Resource res:
+            parent.Add(res.Serialize());
+            break;
+          case Vector2 v:
+            parent.Add(v.Serialize("Item"));
+            break;
+          case Rectangle r:
+            parent.Add(r.Serialize("Item"));
+            break;
+          case Color c:
+            parent.Add(c.Serialize("Item"));
+            break;
+          default:
+            parent.Add(new XElement("Item", item.ToString()));
+            break;
+        }
+      }
+      return parent;
     }
 
     return value switch

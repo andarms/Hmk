@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Globalization;
 using System.Numerics;
 using System.Xml.Linq;
@@ -79,6 +80,24 @@ public abstract class Resource : ISerializable
       }
     }
 
+    // Generic List<T>
+    if (targetType.IsGenericType && targetType.GetGenericTypeDefinition() == typeof(List<>))
+    {
+      var itemType = targetType.GetGenericArguments()[0];
+      var list = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(itemType))!;
+
+      foreach (var child in element.Elements())
+      {
+        // If the child is a serialized GO/Resource, pass it through; otherwise use item-type aware reading
+        var value = DeserializeListItem(itemType, child);
+        if (value != null || itemType.IsClass)
+        {
+          list.Add(value!);
+        }
+      }
+      return list;
+    }
+
     if (targetType == typeof(string))
     {
       return element.Value;
@@ -129,6 +148,58 @@ public abstract class Resource : ISerializable
     {
       return null;
     }
+  }
+
+  private static object? DeserializeListItem(Type itemType, XElement element)
+  {
+    // Allow explicit Type attribute to guide polymorphic items
+    var explicitTypeName = element.Attribute("Type")?.Value;
+    if (!string.IsNullOrWhiteSpace(explicitTypeName))
+    {
+      var resolved = ResolveType(explicitTypeName);
+      if (resolved != null && itemType.IsAssignableFrom(resolved))
+      {
+        if (typeof(Resource).IsAssignableFrom(resolved))
+        {
+          var res = Activator.CreateInstance(resolved) as Resource;
+          res?.Deserialize(element);
+          return res;
+        }
+        if (typeof(GameObject).IsAssignableFrom(resolved))
+        {
+          var go = Activator.CreateInstance(resolved) as GameObject;
+          go?.Deserialize(element);
+          return go;
+        }
+        try { return Convert.ChangeType(element.Value, resolved, CultureInfo.InvariantCulture); } catch { }
+      }
+    }
+
+    if (itemType == typeof(string)) return element.Value;
+    if (itemType == typeof(int)) return int.TryParse(element.Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var i) ? i : 0;
+    if (itemType == typeof(float)) return float.TryParse(element.Value, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var f) ? f : 0f;
+    if (itemType == typeof(Vector2)) return element.ToVector2();
+    if (itemType == typeof(Rectangle)) return element.ToRectangle();
+    if (itemType == typeof(Color)) return element.ToColor();
+
+    if (typeof(Resource).IsAssignableFrom(itemType))
+    {
+      var typeAttr = element.Attribute("Type")?.Value;
+      var t = ResolveType(typeAttr, typeof(Resource)) ?? itemType;
+      var res = Activator.CreateInstance(t) as Resource;
+      res?.Deserialize(element);
+      return res;
+    }
+    if (typeof(GameObject).IsAssignableFrom(itemType))
+    {
+      var typeAttr = element.Attribute("Type")?.Value;
+      var t = ResolveType(typeAttr, typeof(GameObject)) ?? itemType;
+      var go = Activator.CreateInstance(t) as GameObject;
+      go?.Deserialize(element);
+      return go;
+    }
+
+    try { return Convert.ChangeType(element.Value, itemType, CultureInfo.InvariantCulture); } catch { return null; }
   }
 
   private static Type? ResolveType(string? nameOrFullName, Type? mustInherit = null)

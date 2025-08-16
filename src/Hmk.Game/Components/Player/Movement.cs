@@ -47,7 +47,6 @@ public class PlayerMovement : GameObject
     }
     var velocity = direction * currentSpeed * dt;
 
-    // Parent.Position += velocity;
     Parent.Move(velocity);
   }
 }

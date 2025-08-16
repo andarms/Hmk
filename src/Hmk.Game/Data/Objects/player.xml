@@ -34,5 +34,10 @@
   </Children>
   <Traits>
     <Trait Type="IsSolid" />
+    <Trait Type="HasInventory">
+      <Resource Type="Hmk.Engine.Systems.Inventory.Inventory" Property="Inventory">
+        <Items />
+      </Resource>
+    </Trait>
   </Traits>
 </GameObject>

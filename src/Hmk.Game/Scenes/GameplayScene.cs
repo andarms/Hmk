@@ -3,7 +3,9 @@ using Hmk.Engine.Core;
 using Hmk.Engine.Graphics;
 using Hmk.Engine.Scenes;
 using Hmk.Engine.Serializer;
+using Hmk.Engine.Systems.Attack;
 using Hmk.Engine.Systems.Inventory;
+using Hmk.Game.Components.Player;
 
 namespace Hmk.Game.Scenes;
 
@@ -47,6 +49,7 @@ public class GameplayScene : Scene
     //   Health = health
     // };
     // player.AddChild(hurtbox);
+    // player.AddTrait(new HasInventory());
     // Console.WriteLine(player.Serialize());
 
     Item swordItem = new()
