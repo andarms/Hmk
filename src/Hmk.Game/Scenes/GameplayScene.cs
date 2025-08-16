@@ -52,6 +52,30 @@ public class GameplayScene : Scene
     // player.AddTrait(new HasInventory());
     // Console.WriteLine(player.Serialize());
 
+    GameObject window = new()
+    {
+      Position = new(0, 0),
+    };
+    NinePatchSprite ninePatch = new()
+    {
+      TextureName = "Sprites/Inventory/Window",
+      Source = new(0, 0, 19, 19),
+      Left = 7,
+      Top = 7,
+      Right = 7,
+      Bottom = 7,
+      Anchor = new(0),
+      Tint = Color.White
+    };
+    SpriteRenderer spriteRenderer = new()
+    {
+      Sprite = ninePatch,
+      Size = new(100, 100)
+    };
+    window.AddChild(spriteRenderer);
+    AddChild(window);
+
+
 
     var player2 = GameObjectSerializerExtensions.LoadFromXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Objects/player.xml"));
     AddChild(player2);

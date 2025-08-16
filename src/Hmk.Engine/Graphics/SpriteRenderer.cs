@@ -8,11 +8,18 @@ namespace Hmk.Engine.Graphics;
 public class SpriteRenderer : GameObject
 {
   [Save]
-  public Sprite Sprite { get; set; } = null!;
+  public ISprite Sprite { get; set; } = null!;
 
-  private Texture2D Texture => ResourceManager.Textures[Sprite.TextureName];
+
+  [Save]
+  public Vector2 Size { get; set; } = Vector2.Zero;
+
+
+
+
   private Rectangle cachedDestination;
   private Vector2 lastGlobalPosition;
+  private Vector2 cachedSize;
 
   public override void Initialize()
   {
@@ -25,16 +32,19 @@ public class SpriteRenderer : GameObject
 
   public Rectangle GetDestination()
   {
-    if (lastGlobalPosition != GlobalPosition)
+    if (lastGlobalPosition != GlobalPosition || cachedSize != Size)
     {
-      cachedDestination = new Rectangle(GlobalPosition.X, GlobalPosition.Y, Sprite.Source.Width, Sprite.Source.Height);
+      var w = Size.X > 0 ? Size.X : Sprite.Source.Width;
+      var h = Size.Y > 0 ? Size.Y : Sprite.Source.Height;
+      cachedDestination = new Rectangle(GlobalPosition.X, GlobalPosition.Y, w, h);
       lastGlobalPosition = GlobalPosition;
+      cachedSize = Size;
     }
     return cachedDestination;
   }
 
   public override void Draw()
   {
-    DrawTexturePro(Texture, Sprite.Source, GetDestination(), Sprite.Anchor, Sprite.Rotation, Sprite.Tint);
+    Sprite.Draw(GetDestination());
   }
 }
