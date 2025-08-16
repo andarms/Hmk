@@ -1,3 +1,5 @@
+using Hmk.Engine.Input;
+
 namespace Hmk.Engine.Scenes;
 
 public static class SceneManager
@@ -9,6 +11,7 @@ public static class SceneManager
 
   public static Scene? CurrentScene => currentScene;
   public static bool IsTransitioning { get; private set; } = false;
+  public static bool IsPaused => currentScene?.IsPaused ?? false;
 
   public static void Initialize()
   {
@@ -17,6 +20,17 @@ public static class SceneManager
 
   public static void Update(float dt)
   {
+    if (InputManager.IsPressed("pause"))
+    {
+      if (IsPaused)
+      {
+        currentScene?.OnResume();
+      }
+      else
+      {
+        currentScene?.OnPause();
+      }
+    }
     currentScene?.Update(dt);
   }
 

@@ -13,6 +13,9 @@ public class Hitbox : GameObject
   {
     base.Initialize();
     ArgumentNullException.ThrowIfNull(Collider, nameof(Collider));
+
+    Collider.DebugColor = Fade(Color.Red, 0.2f);
+
     CollisionsManager.AddObject(this);
   }
 }

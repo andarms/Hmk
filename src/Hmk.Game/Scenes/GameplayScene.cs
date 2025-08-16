@@ -1,5 +1,9 @@
+using Hmk.Engine.Collision;
+using Hmk.Engine.Core;
+using Hmk.Engine.Graphics;
 using Hmk.Engine.Scenes;
 using Hmk.Engine.Serializer;
+using Hmk.Engine.Systems.Inventory;
 
 namespace Hmk.Game.Scenes;
 
@@ -45,6 +49,33 @@ public class GameplayScene : Scene
     // player.AddChild(hurtbox);
     // Console.WriteLine(player.Serialize());
 
+    Item swordItem = new()
+    {
+      Name = "Sword",
+      Description = "A sharp blade.",
+      Sprite = new Sprite()
+      {
+        TextureName = "Sprites/TinyDungeon",
+        Source = new(128, 128, 16, 16)
+      }
+    };
+    CanBeCollected trait = new()
+    {
+      Item = swordItem,
+    };
+    CollectableItem sword = new()
+    {
+      Position = new(32, 100),
+      Name = "Sword Collectable"
+    };
+    sword.SetCollider(new Collider()
+    {
+      Size = new(16),
+      Offset = new(0, 0)
+    });
+    sword.AddTrait(trait);
+    sword.Initialize();
+    AddChild(sword);
 
     var player2 = GameObjectSerializerExtensions.LoadFromXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Objects/player.xml"));
     AddChild(player2);
@@ -62,6 +93,5 @@ public class GameplayScene : Scene
     BeginMode2D(Camera);
     base.Draw();
     EndMode2D();
-    // Update logic for the gameplay scene
   }
 }

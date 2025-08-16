@@ -21,12 +21,14 @@ public class Hurtbox : GameObject
   {
     base.Initialize();
     ArgumentNullException.ThrowIfNull(Health, nameof(Health));
+    ArgumentNullException.ThrowIfNull(Collider, nameof(Collider));
 
     Zone.OnEnter.Connect(HandleCollision);
     if (!this.HasTrait<HasTriggerZone>())
     {
       this.AddTrait(new HasTriggerZone { Zone = Zone });
     }
+
   }
 
   private void HandleCollision(GameObject other)
