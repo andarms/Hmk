@@ -52,33 +52,6 @@ public class GameplayScene : Scene
     // player.AddTrait(new HasInventory());
     // Console.WriteLine(player.Serialize());
 
-    Item swordItem = new()
-    {
-      Name = "Sword",
-      Description = "A sharp blade.",
-      Sprite = new Sprite()
-      {
-        TextureName = "Sprites/TinyDungeon",
-        Source = new(128, 128, 16, 16)
-      }
-    };
-    CanBeCollected trait = new()
-    {
-      Item = swordItem,
-    };
-    CollectableItem sword = new()
-    {
-      Position = new(32, 100),
-      Name = "Sword Collectable"
-    };
-    sword.SetCollider(new Collider()
-    {
-      Size = new(16),
-      Offset = new(0, 0)
-    });
-    sword.AddTrait(trait);
-    sword.Initialize();
-    AddChild(sword);
 
     var player2 = GameObjectSerializerExtensions.LoadFromXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Objects/player.xml"));
     AddChild(player2);
@@ -88,6 +61,9 @@ public class GameplayScene : Scene
 
     var spikes = GameObjectSerializerExtensions.LoadFromXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Objects/spikes.xml"));
     AddChild(spikes);
+
+    var sword = GameObjectSerializerExtensions.LoadFromXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Objects/Collectables/sword.xml"));
+    AddChild(sword);
   }
 
 

@@ -1,0 +1,36 @@
+<GameObject Type="Hmk.Engine.Systems.Inventory.CollectableItem" Name="Sword Collectable">
+  <Position X="32" Y="100" />
+  <Collider>
+    <Size X="16" Y="16" />
+    <Offset X="0" Y="0" />
+  </Collider>
+  <Children>
+    <GameObject Type="Hmk.Engine.Graphics.SpriteRenderer">
+      <Position X="0" Y="0" />
+      <Resource Type="Hmk.Engine.Graphics.Sprite" Property="Sprite">
+        <TextureName>Sprites/TinyDungeon</TextureName>
+        <Source X="128" Y="128" Width="16" Height="16" />
+        <Anchor X="0" Y="0" />
+        <Tint R="255" G="255" B="255" A="255" />
+        <Rotation>0</Rotation>
+      </Resource>
+      <Size X="0" Y="0" />
+    </GameObject>
+  </Children>
+  <Traits>
+    <Trait Type="CanBeCollected">
+      <Resource Type="Hmk.Engine.Systems.Inventory.Item" Property="Item">
+        <Name>Sword</Name>
+        <Description>A sharp blade.</Description>
+        <Resource Type="Hmk.Engine.Graphics.Sprite" Property="Sprite">
+          <TextureName>Sprites/TinyDungeon</TextureName>
+          <Source X="128" Y="128" Width="16" Height="16" />
+          <Anchor X="0" Y="0" />
+          <Tint R="255" G="255" B="255" A="255" />
+          <Rotation>0</Rotation>
+        </Resource>
+      </Resource>
+      <AutoCollectionAllowed>True</AutoCollectionAllowed>
+    </Trait>
+  </Traits>
+</GameObject>
