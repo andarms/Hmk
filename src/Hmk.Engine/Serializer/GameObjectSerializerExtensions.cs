@@ -267,6 +267,38 @@ public static class GameObjectSerializerExtensions
 
   private static object? DeserializeValueForType(Type targetType, XElement element)
   {
+    // Polymorphic/interface handling via explicit Type attribute on the element
+    var explicitTypeName = element.Attribute("Type")?.Value;
+    if (!string.IsNullOrWhiteSpace(explicitTypeName))
+    {
+      var resolved = ResolveType(explicitTypeName);
+      if (resolved != null && targetType.IsAssignableFrom(resolved))
+      {
+        if (typeof(Resource).IsAssignableFrom(resolved))
+        {
+          var res = Activator.CreateInstance(resolved) as Resource;
+          res?.Deserialize(element);
+          return res;
+        }
+        if (typeof(GameObject).IsAssignableFrom(resolved))
+        {
+          var go = Activator.CreateInstance(resolved) as GameObject;
+          go?.Deserialize(element);
+          return go;
+        }
+
+        // Fallback for simple types
+        try
+        {
+          return Convert.ChangeType(element.Value, resolved, CultureInfo.InvariantCulture);
+        }
+        catch
+        {
+          // ignore and continue to default handling below
+        }
+      }
+    }
+
     if (targetType == typeof(string))
     {
       return element.Value;

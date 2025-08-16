@@ -8,6 +8,7 @@ public class Health : Resource
 {
   [Save]
   public int Max { get; set; } = 0;
+
   [Save]
   public int Current { get; set; } = 0;
 

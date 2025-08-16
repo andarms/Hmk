@@ -1,0 +1,25 @@
+<GameObject Type="Hmk.Engine.Core.GameObject" Name="Spikes">
+  <Position X="100" Y="32" />
+  <Children>
+    <GameObject Type="Hmk.Engine.Graphics.SpriteRenderer">
+      <Position X="0" Y="0" />
+      <Resource Type="Hmk.Engine.Graphics.Sprite" Property="Sprite">
+        <TextureName>Sprites/TinyDungeon</TextureName>
+        <Source X="80" Y="48" Width="16" Height="16" />
+        <Anchor X="0" Y="0" />
+        <Tint R="255" G="255" B="255" A="255" />
+        <Rotation>0</Rotation>
+      </Resource>
+    </GameObject>
+    <GameObject Type="Hmk.Engine.Systems.Attack.Hitbox" Name="SpikeHitbox">
+      <Position X="0" Y="0" />
+      <Collider>
+        <Size X="16" Y="16" />
+        <Offset X="0" Y="0" />
+      </Collider>
+      <Resource Type="Hmk.Engine.Systems.Attack.SimpleDamage" Property="DamageCalculator">
+        <Amount>10</Amount>
+      </Resource>
+    </GameObject>
+  </Children>
+</GameObject>

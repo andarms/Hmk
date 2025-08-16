@@ -1,10 +1,5 @@
-using Hmk.Engine.Collision;
-using Hmk.Engine.Core;
-using Hmk.Engine.Graphics;
 using Hmk.Engine.Scenes;
 using Hmk.Engine.Serializer;
-using Hmk.Engine.Systems.Attack;
-using Hmk.Game.Components.Player;
 
 namespace Hmk.Game.Scenes;
 
@@ -51,28 +46,14 @@ public class GameplayScene : Scene
     // Console.WriteLine(player.Serialize());
 
 
-
-    Hitbox hitbox = new()
-    {
-      Name = "RandomHitbox",
-      Position = new(200, 16),
-      DamageCalculator = new SimpleDamage()
-      {
-        Amount = 10
-      }
-    };
-    hitbox.SetCollider(new()
-    {
-      Size = new(16),
-      Offset = new(0)
-    });
-    AddChild(hitbox);
-    Console.WriteLine(hitbox.Serialize());
-
     var player2 = GameObjectSerializerExtensions.LoadFromXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Objects/player.xml"));
     AddChild(player2);
+
     var obj = GameObjectSerializerExtensions.LoadFromXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Objects/ghost.xml"));
     AddChild(obj);
+
+    var spikes = GameObjectSerializerExtensions.LoadFromXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Objects/spikes.xml"));
+    AddChild(spikes);
   }
 
 

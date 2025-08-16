@@ -47,6 +47,38 @@ public abstract class Resource : ISerializable
 
   private static object? DeserializeValueForType(Type targetType, XElement element)
   {
+    // Handle explicit type hint on the element for polymorphic/interface targets
+    // e.g., a property typed as an interface where the XML contains Type="ConcreteType"
+    var explicitTypeName = element.Attribute("Type")?.Value;
+    if (!string.IsNullOrWhiteSpace(explicitTypeName))
+    {
+      var resolved = ResolveType(explicitTypeName);
+      if (resolved != null && targetType.IsAssignableFrom(resolved))
+      {
+        if (typeof(Resource).IsAssignableFrom(resolved))
+        {
+          var res = Activator.CreateInstance(resolved) as Resource;
+          res?.Deserialize(element);
+          return res;
+        }
+        if (typeof(GameObject).IsAssignableFrom(resolved))
+        {
+          var go = Activator.CreateInstance(resolved) as GameObject;
+          go?.Deserialize(element);
+          return go;
+        }
+        // Fallback: try to convert value to the resolved simple type if applicable
+        try
+        {
+          return Convert.ChangeType(element.Value, resolved, CultureInfo.InvariantCulture);
+        }
+        catch
+        {
+          // ignore and continue to the default handling below
+        }
+      }
+    }
+
     if (targetType == typeof(string))
     {
       return element.Value;

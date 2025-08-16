@@ -31,7 +31,6 @@ public class Hurtbox : GameObject
 
   private void HandleCollision(GameObject other)
   {
-    Console.WriteLine($"Hurtbox collided with {other.Name}");
     if (other is Hitbox hitbox)
     {
       Health.TakeDamage(hitbox.DamageCalculator.CalculateDamage());
