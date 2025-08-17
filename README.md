@@ -49,6 +49,72 @@ Trait <|-- HasSomething
 Trait <|-- CanDoSomething
 ```
 
+### Attack System
+
+```mermaid
+
+```
+
+### Attack System
+
+```mermaid
+classDiagram
+direction LR
+
+class Hurtbox {
+    +Health: Health
+    +Zone: TriggerZone
+}
+
+class IDamageCalculator {
+    <<interface>>
+    +CalculateDamage() int
+}
+
+class NoDamage {
+    +CalculateDamage() int
+}
+
+class SimpleDamage {
+    +Amount: int
+    +CriticalChance: float
+    +CriticalMultiplier: float
+    +CalculateDamage() int
+}
+
+
+
+class Hitbox {
+    +DamageCalculator: IDamageCalculator
+}
+
+Resource ()-- Health
+Hitbox ..> IDamageCalculator : delegates
+GameObject ()-- Hitbox
+
+Hurtbox o-- "1" Health
+Hitbox ..> Hurtbox : OnEnter -> Health.TakeDamage()
+
+
+GameObject ()-- Hurtbox
+
+
+class Health {
+    +Max: int
+    +Current: int
+    +IsDead: bool
+    +OnDead: Signal
+    +HealthChanged: Signal
+    +TakeDamage(amount: int) void
+    +Heal(amount: int) void
+}
+
+IDamageCalculator <|.. NoDamage
+IDamageCalculator <|.. SimpleDamage
+
+Resource ()-- SimpleDamage
+```
+
 ### Inventory System
 
 ```mermaid
