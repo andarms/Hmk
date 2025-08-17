@@ -6,7 +6,7 @@ using Hmk.Engine.Resources;
 
 namespace Hmk.Engine.Core;
 
-public class Trait : ISerializable
+public abstract class Trait : ISerializable
 {
   public string Type => GetType().Name;
 

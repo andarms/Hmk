@@ -5,6 +5,48 @@
   <p><strong>Hmk Engine</strong> is a 2D Game Engine created with C# and Raylib</p>
 </div>
 
+# Game Object Architecture
+
+```mermaid
+classDiagram
+direction LR
+
+class GameObject {
+    +Name: string
+    +Position: Vector2
+    +Parent: GameObject
+    +Collider: Collider
+    +Initialize()
+    +Update(float dt)
+    +Draw()
+    +Terminate()
+
+    +Children: List<GameObject>
+    +Traits: List<Trait>
+    +AddChild(obj: GameObject) void
+    +AddTrait(t: Trait) void
+    +Trait<T>(): T
+}
+
+class Collider{
+    +Offset: Vector2
+    +Size: Vector2
+}
+
+class Trait {
+    <<abstract>>
+}
+
+GameObject  o-- GameObject : children
+GameObject  "1" o-- "1" Collider
+GameObject "1" *-- "*" Trait : traits
+
+
+Trait <|-- IsSomething
+Trait <|-- HasSomething
+Trait <|-- CanDoSomething
+```
+
 # Inventory System
 
 ```mermaid
