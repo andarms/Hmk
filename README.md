@@ -52,12 +52,6 @@ Trait <|-- CanDoSomething
 ### Attack System
 
 ```mermaid
-
-```
-
-### Attack System
-
-```mermaid
 classDiagram
 direction LR
 
