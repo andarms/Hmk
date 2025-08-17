@@ -16,8 +16,8 @@ direction LR
 class GameObject {
     +Name: string
     +Position: Vector2
-    +Parent: GameObject
-    +Collider: Collider
+    +Parent?: GameObject
+    +Collider?: Collider
     +Initialize()
     +Update(float dt)
     +Draw()
@@ -27,7 +27,7 @@ class GameObject {
     +Traits: List<Trait>
     +AddChild(obj: GameObject) void
     +AddTrait(t: Trait) void
-    +Trait<T>(): T
+    +Trait<T>() Trait
 }
 
 class Collider{
