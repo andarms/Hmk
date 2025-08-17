@@ -5,7 +5,9 @@
   <p><strong>Hmk Engine</strong> is a 2D Game Engine created with C# and Raylib</p>
 </div>
 
-# Game Object Architecture
+# Architecture Design
+
+### Game Object Architecture
 
 ```mermaid
 classDiagram
@@ -47,7 +49,7 @@ Trait <|-- HasSomething
 Trait <|-- CanDoSomething
 ```
 
-# Inventory System
+### Inventory System
 
 ```mermaid
 classDiagram
