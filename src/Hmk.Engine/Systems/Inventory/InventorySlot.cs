@@ -8,8 +8,6 @@ public class InventorySlot : GameObject
 {
   public static Vector2 Size { get; } = new(20, 20);
 
-  private Item? item = null;
-
   public bool Occupied { get; set; } = false;
 
   readonly Sprite background = new()
@@ -39,7 +37,6 @@ public class InventorySlot : GameObject
     ArgumentNullException.ThrowIfNull(item, nameof(item));
     ArgumentNullException.ThrowIfNull(item.Sprite, nameof(item.Sprite));
 
-    this.item = item;
     Occupied = true;
     background.Source = filledSource;
 
@@ -55,6 +52,5 @@ public class InventorySlot : GameObject
   {
     Occupied = false;
     background.Source = emptySource;
-    item = null;
   }
 }

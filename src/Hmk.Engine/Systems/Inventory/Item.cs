@@ -15,5 +15,11 @@ public class Item : Resource
   [Save]
   public Sprite? Sprite { get; set; } = null;
 
-  public virtual void Use() { }
+  public IUsable? UsableBehavior { get; set; } = null;
+
+  public virtual void Use()
+  {
+    ArgumentNullException.ThrowIfNull(UsableBehavior, nameof(UsableBehavior));
+    UsableBehavior.Use();
+  }
 }
