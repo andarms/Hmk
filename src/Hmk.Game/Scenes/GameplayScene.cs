@@ -1,3 +1,4 @@
+using System.Numerics;
 using Hmk.Engine.Collision;
 using Hmk.Engine.Core;
 using Hmk.Engine.Graphics;
@@ -52,10 +53,13 @@ public class GameplayScene : Scene
     // player.AddTrait(new HasInventory());
     // Console.WriteLine(player.Serialize());
     InventoryWindow inventoryWindow = new();
-    AddChild(inventoryWindow);
+    float x = Viewport.X + Viewport.GetSize().X / 2 - inventoryWindow.WindowSize.X / 2;
+    float y = Viewport.Y + Viewport.GetSize().Y / 2 - inventoryWindow.WindowSize.Y / 2;
+    inventoryWindow.Position = new Vector2(x, y);
+    AddChild(inventoryWindow, UILayer);
 
     var player2 = GameObjectSerializerExtensions.LoadFromXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Objects/player.xml"));
-    AddChild(player2, UILayer);
+    AddChild(player2);
 
     var obj = GameObjectSerializerExtensions.LoadFromXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Objects/ghost.xml"));
     AddChild(obj);
@@ -75,13 +79,12 @@ public class GameplayScene : Scene
     {
       inventoryWindow.UpdateInventory(i.Inventory);
     });
-
   }
 
 
   public override void Draw()
   {
-    BeginMode2D(Camera);
+    BeginMode2D(Viewport.Camera);
     base.Draw();
     EndMode2D();
   }

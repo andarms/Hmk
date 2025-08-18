@@ -8,12 +8,15 @@ public class InventoryWindow : GameObject
 {
   Vector2 grid = new(5, 3);
   public List<InventorySlot> Slots { get; } = [];
+  public Vector2 WindowSize { get; private set; }
+
+  Color backgroundColor = new(0, 0, 0, 150);
 
   public InventoryWindow()
   {
     int gap = 4;
     int padding = 6;
-    Vector2 windowSize = new(grid.X * (InventorySlot.Size.X + gap) + padding * 2, grid.Y * (InventorySlot.Size.Y + gap) + padding * 2);
+    WindowSize = new(grid.X * (InventorySlot.Size.X + gap) + padding * 2, grid.Y * (InventorySlot.Size.Y + gap) + padding * 2);
     GameObject window = new()
     {
       Position = new(0, 0),
@@ -32,7 +35,7 @@ public class InventoryWindow : GameObject
     SpriteRenderer spriteRenderer = new()
     {
       Sprite = ninePatch,
-      Size = windowSize
+      Size = WindowSize
     };
     window.AddChild(spriteRenderer);
     this.AddChild(window);
@@ -79,5 +82,12 @@ public class InventoryWindow : GameObject
         Slots[i].AddItem(items[i]);
       }
     }
+  }
+
+
+  public override void Draw()
+  {
+    DrawRectangleV(Vector2.Zero, Viewport.GetSize(), backgroundColor);
+    base.Draw();
   }
 }

@@ -1,4 +1,3 @@
-
 using Hmk.Engine.Collision;
 using Hmk.Engine.Input;
 using Hmk.Engine.Resources;
@@ -10,8 +9,9 @@ public class Game
 {
   public static void Initialize()
   {
-    InitWindow(1280, 720, "Game");
-    SetTargetFPS(60);
+    InitWindow(Settings.WindowWidth, Settings.WindowHeight, Settings.WindowTitle);
+    SetTargetFPS(Settings.TargetFPS);
+
     ResourceManager.Initialize();
     SceneManager.Initialize();
     CollisionsManager.Initialize();
