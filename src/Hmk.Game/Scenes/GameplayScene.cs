@@ -1,20 +1,12 @@
-using System.Numerics;
-using Hmk.Engine.Collision;
-using Hmk.Engine.Core;
 using Hmk.Engine.Graphics;
+using Hmk.Engine.Input;
 using Hmk.Engine.Scenes;
 using Hmk.Engine.Serializer;
-using Hmk.Engine.Systems.Attack;
-using Hmk.Engine.Systems.Inventory;
-using Hmk.Game.Components.Player;
 
 namespace Hmk.Game.Scenes;
 
 public class GameplayScene : Scene
 {
-  public override Color BackgroundColor => Color.DarkGreen;
-
-
   public override void Initialize()
   {
     base.Initialize();
@@ -52,11 +44,11 @@ public class GameplayScene : Scene
     // player.AddChild(hurtbox);
     // player.AddTrait(new HasInventory());
     // Console.WriteLine(player.Serialize());
-    InventoryWindow inventoryWindow = new();
-    float x = Viewport.X + Viewport.GetSize().X / 2 - inventoryWindow.WindowSize.X / 2;
-    float y = Viewport.Y + Viewport.GetSize().Y / 2 - inventoryWindow.WindowSize.Y / 2;
-    inventoryWindow.Position = new Vector2(x, y);
-    AddChild(inventoryWindow, UILayer);
+    // InventoryWindow inventoryWindow = new();
+    // float x = Viewport.X + Viewport.GetSize().X / 2 - inventoryWindow.WindowSize.X / 2;
+    // float y = Viewport.Y + Viewport.GetSize().Y / 2 - inventoryWindow.WindowSize.Y / 2;
+    // inventoryWindow.Position = new Vector2(x, y);
+    // AddChild(inventoryWindow, UILayer);
 
     var player2 = GameObjectSerializerExtensions.LoadFromXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Objects/player.xml"));
     AddChild(player2);
@@ -70,20 +62,23 @@ public class GameplayScene : Scene
     var sword = GameObjectSerializerExtensions.LoadFromXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Objects/Collectables/sword.xml"));
     AddChild(sword);
 
-    HasInventory? i = player2.Trait<HasInventory>();
-    i?.Inventory?.OnItemAdded.Connect((_) =>
+    SceneManager.AddScene(new InventoryScene(player2));
+  }
+
+
+  public override void Update(float dt)
+  {
+    base.Update(dt);
+    if (InputManager.JustPressed("Inventory"))
     {
-      inventoryWindow.UpdateInventory(i.Inventory);
-    });
-    i?.Inventory.OnItemRemoved.Connect((_) =>
-    {
-      inventoryWindow.UpdateInventory(i.Inventory);
-    });
+      SceneManager.PushScene<InventoryScene>();
+    }
   }
 
 
   public override void Draw()
   {
+    ClearBackground(Color.DarkGreen);
     BeginMode2D(Viewport.Camera);
     base.Draw();
     EndMode2D();

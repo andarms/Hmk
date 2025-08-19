@@ -36,8 +36,6 @@ public static class SceneManager
 
   public static void Draw()
   {
-
-    ClearBackground(currentScene?.BackgroundColor ?? Color.Black);
     foreach (var scene in sceneStack)
     {
       scene.Draw();

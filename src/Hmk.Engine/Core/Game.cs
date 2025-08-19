@@ -15,7 +15,12 @@ public class Game
     ResourceManager.Initialize();
     SceneManager.Initialize();
     CollisionsManager.Initialize();
-    InputMap.CreateDefault().Apply();
+    var maps = InputMap.CreateDefault();
+    maps.AddAction("Inventory").WithKey(KeyboardKey.I);
+    maps.Apply();
+
+
+
   }
 
   public static void Run()
