@@ -1,10 +1,14 @@
+using System.Numerics;
 using Hmk.Engine.Collision;
 using Hmk.Engine.Core;
 using Hmk.Engine.Graphics;
 using Hmk.Engine.Input;
 using Hmk.Engine.Scenes;
 using Hmk.Engine.Serializer;
+using Hmk.Engine.Systems.Attack;
 using Hmk.Engine.Systems.Interaction;
+using Hmk.Engine.Systems.Inventory;
+using Hmk.Game.Components.Player;
 
 namespace Hmk.Game.Scenes;
 
@@ -70,13 +74,15 @@ public class GameplayScene : Scene
 
     SceneManager.AddScene(new InventoryScene(player2));
 
-    InteractionTrigger trigger = new();
-    trigger.SetCollider(new()
-    {
-      Size = new(8, 8),
-      Offset = new(0, 0)
-    });
-    player2.AddChild(trigger);
+    // InteractionTrigger trigger = new();
+    // trigger.SetCollider(new()
+    // {
+    //   Size = new(8, 8),
+    //   Offset = new(0, 0)
+    // });
+    // player.AddChild(trigger);
+
+    // Console.WriteLine(player.Serialize());
 
 
   }

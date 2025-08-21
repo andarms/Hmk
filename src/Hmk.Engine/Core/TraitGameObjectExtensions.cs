@@ -4,7 +4,8 @@ public static class TraitGameObjectExtensions
 {
   public static void AddTrait<T>(this GameObject gameObject, T trait) where T : Trait
   {
-    gameObject.Traits.Add(trait.GetType(), trait);
+    // Upsert to avoid duplicate-key exceptions if the same trait type is added twice
+    gameObject.Traits[trait.GetType()] = trait;
   }
   public static bool HasTrait<T>(this GameObject gameObject) where T : Trait
   {

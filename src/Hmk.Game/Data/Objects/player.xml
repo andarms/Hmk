@@ -1,9 +1,10 @@
-<GameObject Type="Hmk.Engine.Collision.DynamicObject" Name="Player">
+<GameObject Type="Hmk.Engine.Collision.DynamicObject">
   <Position X="10" Y="100" />
   <Collider>
     <Size X="8" Y="8" />
     <Offset X="4" Y="8" />
   </Collider>
+  <FacingDirection>Down</FacingDirection>
   <Children>
     <GameObject Type="Hmk.Engine.Graphics.SpriteRenderer">
       <Position X="0" Y="0" />
@@ -14,6 +15,7 @@
         <Tint R="255" G="255" B="255" A="255" />
         <Rotation>0</Rotation>
       </Resource>
+      <Size X="0" Y="0" />
     </GameObject>
     <GameObject Type="Hmk.Game.Components.Player.PlayerMovement">
       <Position X="0" Y="0" />
@@ -30,6 +32,13 @@
         <Current>100</Current>
       </Resource>
       <Resource Type="Hmk.Engine.Collision.TriggerZone" Property="Zone" />
+    </GameObject>
+    <GameObject Type="Hmk.Engine.Systems.Interaction.InteractionTrigger">
+      <Position X="0" Y="0" />
+      <Collider>
+        <Size X="8" Y="8" />
+        <Offset X="0" Y="0" />
+      </Collider>
     </GameObject>
   </Children>
   <Traits>

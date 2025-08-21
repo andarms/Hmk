@@ -121,6 +121,7 @@ public static class CollisionsManager
     HasInventory? inventoryB = objB.Trait<HasInventory>();
 
     if (CanBeCollectedTraitA == null && CanBeCollectedTraitB == null) return;
+    if (inventoryA == null && inventoryB == null) return;
 
     if (CanBeCollectedTraitA != null && CanBeCollectedTraitA.AutoCollectionAllowed && CanBeCollectedTraitA.Item != null)
     {

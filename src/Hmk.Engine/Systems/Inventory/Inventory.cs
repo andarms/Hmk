@@ -14,7 +14,6 @@ public class Inventory : Resource
 
   public void AddItem(Item item)
   {
-    Console.WriteLine($"Item added: {item.Name}");
     Items.Add(item);
     OnItemAdded.Emit(item);
   }

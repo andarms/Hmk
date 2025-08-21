@@ -327,6 +327,10 @@ public static class GameObjectSerializerExtensions
     {
       return float.TryParse(element.Value, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var f) ? f : 0f;
     }
+    if (targetType.IsEnum)
+    {
+      try { return Enum.Parse(targetType, element.Value.Trim(), ignoreCase: true); } catch { return null; }
+    }
     if (targetType == typeof(Vector2))
     {
       return element.ToVector2();
@@ -398,6 +402,10 @@ public static class GameObjectSerializerExtensions
     if (itemType == typeof(string)) return element.Value;
     if (itemType == typeof(int)) return int.TryParse(element.Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var i) ? i : 0;
     if (itemType == typeof(float)) return float.TryParse(element.Value, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var f) ? f : 0f;
+    if (itemType.IsEnum)
+    {
+      try { return Enum.Parse(itemType, element.Value.Trim(), ignoreCase: true); } catch { return null; }
+    }
     if (itemType == typeof(Vector2)) return element.ToVector2();
     if (itemType == typeof(Rectangle)) return element.ToRectangle();
     if (itemType == typeof(Color)) return element.ToColor();
