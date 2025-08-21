@@ -111,40 +111,40 @@ config:
 ---
 classDiagram
 direction TB
+    class Interaction {
+	    +CanPerformInteraction(actor: GameObject) bool
+	    +Interact(actor: GameObject) void
+    }
+    class ConcreteInteraction {
+	    +CanPerformInteraction(actor: GameObject) bool
+	    +Interact(actor: GameObject) void
+    }
+    class HasInteraction {
+	    +Interactions: List
+	    +HandleInteractinos(actor: GameObject) void
+    }
+    class GameObject {
+	    +Traits: List
+    }
+    class Trait {
+    }
+    class CollisionManager {
+	    +TriggerInteraction(actor: GameObject, direction: Vector2)
+    }
+    class Resource {
+    }
 
-class Interaction {
-    +CanPerformInteraction(actor: GameObject) bool
-    +Interact(actor: GameObject) void
-}
-class ConcreteInteraction {
-    +CanPerformInteraction(actor: GameObject) bool
-    +Interact(actor: GameObject) void
-}
-class HasInteraction {
-    +Interactions: List
-    +HandleInteractinos(actor: GameObject) void
-}
-class GameObject {
-    +Traits: List
-}
-class Trait {
-}
-class CollisionManager {
-    +TriggerInteraction(actor: GameObject, direction: Vector2)
-}
-class Resource {
-}
+	<<abstract>> Interaction
+	<<abstract>> Trait
+	<<static>> CollisionManager
 
-<<abstract>> Interaction
-<<abstract>> Trait
-<<static>> CollisionManager
+    Interaction <|-- ConcreteInteraction
+    Trait <|-- HasInteraction
+    HasInteraction *-- "0..*" Interaction : delegates
+    GameObject *-- "0..*" Trait
+    CollisionManager -- HasInteraction : onInteraction
+    Resource <|-- Interaction
 
-Interaction <|-- ConcreteInteraction
-Trait <|-- HasInteraction
-HasInteraction *-- "0..*" Interaction : delegates
-GameObject *-- "0..*" Trait
-CollisionManager -- HasInteraction : onInteraction
-Resource <|-- Interaction
 ```
 
 ## Inventory System
