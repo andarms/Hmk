@@ -8,7 +8,6 @@ namespace Hmk.Game.Components.Player;
 
 public class PlayerMovement : GameObject
 {
-
   public new DynamicObject? Parent => base.Parent as DynamicObject;
 
   [Save]
@@ -39,11 +38,17 @@ public class PlayerMovement : GameObject
       currentSpeed *= 2f;
     }
 
-
-
     if (direction != Vector2.Zero)
     {
       direction = Vector2.Normalize(direction);
+      if (direction.Y != 0)
+      {
+        Parent.FacingDirection = direction.Y > 0 ? Directions.Down : Directions.Up;
+      }
+      if (direction.X != 0)
+      {
+        Parent.FacingDirection = direction.X > 0 ? Directions.Right : Directions.Left;
+      }
     }
     var velocity = direction * currentSpeed * dt;
 

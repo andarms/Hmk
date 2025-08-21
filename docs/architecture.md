@@ -103,43 +103,48 @@ Resource ()-- SimpleDamage
 ## Interaction System
 
 ```mermaid
+---
+config:
+  layout: elk
+  class:
+    hideEmptyMembersBox: true
+---
 classDiagram
-direction LR
-
-class IInteraction {
-    <<interface>>
-    +Interact(actor: GameObject) void
-}
+direction TB
 
 class Interaction {
+    +CanPerformInteraction(actor: GameObject) bool
     +Interact(actor: GameObject) void
 }
-
-class GameObject {
-    +Traits: List<Trait>
-}
-
 class ConcreteInteraction {
+    +CanPerformInteraction(actor: GameObject) bool
     +Interact(actor: GameObject) void
 }
-
-class Trait {
-    <<abstract>>
-}
-
 class HasInteraction {
-    +Interaction: Interaction
+    +Interactions: List
+    +HandleInteractinos(actor: GameObject) void
+}
+class GameObject {
+    +Traits: List
+}
+class Trait {
+}
+class CollisionManager {
+    +TriggerInteraction(actor: GameObject, direction: Vector2)
+}
+class Resource {
 }
 
+<<abstract>> Interaction
+<<abstract>> Trait
+<<static>> CollisionManager
 
-%% Relations
-Interaction --> IInteraction : delegates
-IInteraction <|-- ConcreteInteraction
-
+Interaction <|-- ConcreteInteraction
 Trait <|-- HasInteraction
-HasInteraction *-- Interaction
-
-GameObject *-- Trait
+HasInteraction *-- "0..*" Interaction : delegates
+GameObject *-- "0..*" Trait
+CollisionManager -- HasInteraction : onInteraction
+Resource <|-- Interaction
 ```
 
 ## Inventory System

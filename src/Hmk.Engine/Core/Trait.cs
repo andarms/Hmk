@@ -74,6 +74,9 @@ public abstract class Trait : ISerializable
 
   private static object? DeserializeValueForType(Type targetType, XElement element)
   {
+    // Normalize text once
+    var text = element.Value?.Trim() ?? string.Empty;
+
     // Handle explicit type hint on the element for polymorphic/interface targets
     var explicitTypeName = element.Attribute("Type")?.Value;
     if (!string.IsNullOrWhiteSpace(explicitTypeName))
@@ -94,8 +97,25 @@ public abstract class Trait : ISerializable
           return go;
         }
         // Fallback for simple types
-        try { return Convert.ChangeType(element.Value, resolved, CultureInfo.InvariantCulture); } catch { }
+        try
+        {
+          if (resolved.IsEnum)
+          {
+            return Enum.Parse(resolved, text, ignoreCase: true);
+          }
+          return Convert.ChangeType(text, resolved, CultureInfo.InvariantCulture);
+        }
+        catch { }
       }
+    }
+
+    // Handle Nullable<T>
+    var underlyingNullable = Nullable.GetUnderlyingType(targetType);
+    if (underlyingNullable != null)
+    {
+      if (string.IsNullOrWhiteSpace(text)) return null;
+      // Delegate to same method with underlying type (covers enums and primitives)
+      return DeserializeValueForType(underlyingNullable, element);
     }
 
     // Handle List<T>
@@ -115,11 +135,15 @@ public abstract class Trait : ISerializable
     }
 
     if (targetType == typeof(string))
-      return element.Value;
+      return text;
     if (targetType == typeof(int))
-      return int.TryParse(element.Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var i) ? i : 0;
+      return int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out var i) ? i : 0;
     if (targetType == typeof(float))
-      return float.TryParse(element.Value, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var f) ? f : 0f;
+      return float.TryParse(text, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var f) ? f : 0f;
+    if (targetType.IsEnum)
+    {
+      try { return Enum.Parse(targetType, text, ignoreCase: true); } catch { return null; }
+    }
     if (targetType == typeof(Vector2))
       return element.ToVector2();
     if (targetType == typeof(Rectangle))
@@ -144,11 +168,21 @@ public abstract class Trait : ISerializable
       return go;
     }
 
-    try { return Convert.ChangeType(element.Value, targetType, CultureInfo.InvariantCulture); } catch { return null; }
+    try { return Convert.ChangeType(text, targetType, CultureInfo.InvariantCulture); } catch { return null; }
   }
 
   private static object? DeserializeListItem(Type itemType, XElement element)
   {
+    var text = element.Value?.Trim() ?? string.Empty;
+
+    // Handle Nullable<T> items
+    var underlyingNullable = Nullable.GetUnderlyingType(itemType);
+    if (underlyingNullable != null)
+    {
+      if (string.IsNullOrWhiteSpace(text)) return null;
+      return DeserializeValueForType(underlyingNullable, element);
+    }
+
     var explicitTypeName = element.Attribute("Type")?.Value;
     if (!string.IsNullOrWhiteSpace(explicitTypeName))
     {
@@ -167,13 +201,25 @@ public abstract class Trait : ISerializable
           go?.Deserialize(element);
           return go;
         }
-        try { return Convert.ChangeType(element.Value, resolved, CultureInfo.InvariantCulture); } catch { }
+        try
+        {
+          if (resolved.IsEnum)
+          {
+            return Enum.Parse(resolved, text, ignoreCase: true);
+          }
+          return Convert.ChangeType(text, resolved, CultureInfo.InvariantCulture);
+        }
+        catch { }
       }
     }
 
-    if (itemType == typeof(string)) return element.Value;
-    if (itemType == typeof(int)) return int.TryParse(element.Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var i) ? i : 0;
-    if (itemType == typeof(float)) return float.TryParse(element.Value, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var f) ? f : 0f;
+    if (itemType == typeof(string)) return text;
+    if (itemType == typeof(int)) return int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out var i) ? i : 0;
+    if (itemType == typeof(float)) return float.TryParse(text, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var f) ? f : 0f;
+    if (itemType.IsEnum)
+    {
+      try { return Enum.Parse(itemType, text, ignoreCase: true); } catch { return null; }
+    }
     if (itemType == typeof(Vector2)) return element.ToVector2();
     if (itemType == typeof(Rectangle)) return element.ToRectangle();
     if (itemType == typeof(Color)) return element.ToColor();
@@ -195,7 +241,7 @@ public abstract class Trait : ISerializable
       return res;
     }
 
-    try { return Convert.ChangeType(element.Value, itemType, CultureInfo.InvariantCulture); } catch { return null; }
+    try { return Convert.ChangeType(text, itemType, CultureInfo.InvariantCulture); } catch { return null; }
   }
 
   private static Type? ResolveType(string? nameOrFullName, Type? mustInherit = null)

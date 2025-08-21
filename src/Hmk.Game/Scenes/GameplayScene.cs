@@ -1,7 +1,10 @@
+using Hmk.Engine.Collision;
+using Hmk.Engine.Core;
 using Hmk.Engine.Graphics;
 using Hmk.Engine.Input;
 using Hmk.Engine.Scenes;
 using Hmk.Engine.Serializer;
+using Hmk.Engine.Systems.Interaction;
 
 namespace Hmk.Game.Scenes;
 
@@ -62,7 +65,20 @@ public class GameplayScene : Scene
     var sword = GameObjectSerializerExtensions.LoadFromXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Objects/Collectables/sword.xml"));
     AddChild(sword);
 
+    var signPost = GameObjectSerializerExtensions.LoadFromXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Objects/sign-post.xml"));
+    AddChild(signPost);
+
     SceneManager.AddScene(new InventoryScene(player2));
+
+    InteractionTrigger trigger = new();
+    trigger.SetCollider(new()
+    {
+      Size = new(8, 8),
+      Offset = new(0, 0)
+    });
+    player2.AddChild(trigger);
+
+
   }
 
 
@@ -79,6 +95,7 @@ public class GameplayScene : Scene
   public override void Draw()
   {
     ClearBackground(Color.DarkGreen);
+    DrawFPS(10, 10);
     BeginMode2D(Viewport.Camera);
     base.Draw();
     EndMode2D();

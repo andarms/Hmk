@@ -1,4 +1,5 @@
 using Hmk.Engine.Core;
+using Hmk.Engine.Systems.Interaction;
 using Hmk.Engine.Systems.Inventory;
 
 namespace Hmk.Engine.Collision;
@@ -187,6 +188,20 @@ public static class CollisionsManager
         // Object is below, push it down
         obj.Position = new(obj.Position.X, other.Position.Y + other.Collider.Size.Y + other.Collider.Offset.Y - obj.Collider.Offset.Y);
       }
+    }
+  }
+
+
+  public static void TriggerInteraction(GameObject obj, Directions facingDirection)
+  {
+    foreach (var nearby in GetPotentialCollisions(obj))
+    {
+      var interaction = nearby.Trait<HasInteraction>();
+      if (interaction == null) continue;
+
+      if (interaction.InteractionSide != null && interaction.InteractionSide != facingDirection.Inverse()) { continue; }
+
+      interaction.HandleInteraction(obj);
     }
   }
 }
