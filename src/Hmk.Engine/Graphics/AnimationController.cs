@@ -12,10 +12,15 @@ public class AnimationController : GameObject
   public string? Start { get; set; }
 
   private Animation? currentAnimation;
+  private string? currentAnimationName;
 
   public void PlayAnimation(string animationName)
   {
-    if (Animations.TryGetValue(animationName, out var animation))
+
+    if (currentAnimationName == animationName) return;
+    currentAnimationName = animationName;
+    Console.WriteLine($"Playing animation: {currentAnimationName}");
+    if (Animations.TryGetValue(currentAnimationName, out var animation))
     {
       currentAnimation = animation;
       currentAnimation.Initialize();

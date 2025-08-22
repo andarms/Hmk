@@ -26,6 +26,17 @@ public static class GameObjectChildrenExtension
   }
 
 
+  public static IEnumerable<T> GetChildren<T>(this GameObject gameObject) where T : GameObject
+  {
+    return gameObject.Children.OfType<T>();
+  }
+
+  public static T? GetChild<T>(this GameObject gameObject) where T : GameObject
+  {
+    return gameObject.Children.OfType<T>().FirstOrDefault();
+  }
+
+
   public static void SetGlobalPosition(this GameObject gameObject, Vector2 position)
   {
     if (gameObject.Parent != null)

@@ -17,7 +17,7 @@ public class EditorScene : Scene
   public override void OnEnter()
   {
     base.OnEnter();
-    rlImGui.Setup(true);
+    rlImGui.Setup(false);
   }
 
 

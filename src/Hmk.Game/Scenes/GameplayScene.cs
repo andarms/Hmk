@@ -67,38 +67,7 @@ public class GameplayScene : Scene
     var signPost = GameObjectSerializerExtensions.LoadFromXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Objects/sign-post.xml"));
     AddChild(signPost);
 
-    var ninja = GameObjectSerializerExtensions.LoadFromXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Objects/ninja.xml"));
-    AddChild(ninja);
-
     SceneManager.AddScene(new InventoryScene(player2));
-
-    // SpriteSheet spriteSheet = new()
-    // {
-    //   TextureName = "Sprites/Actor/NinjaGreen/SpriteSheet",
-    //   FrameWidth = 16,
-    //   FrameHeight = 16
-    // };
-    // spriteSheet.SetFrame(4);
-    // GameObject ninja = new()
-    // {
-    //   Position = new Vector2(10, 100)
-    // };
-    // ninja.AddChild(new SpriteRenderer { Sprite = spriteSheet });
-    // Animation walkDown = new() { SpriteSheet = spriteSheet, Frames = [4, 8, 12, 8], Speed = 180f };
-    // Animation walkUp = new() { SpriteSheet = spriteSheet, Frames = [5, 9, 13, 9], Speed = 180f };
-    // Animation walkLeft = new() { SpriteSheet = spriteSheet, Frames = [6, 10, 14, 10], Speed = 180f };
-    // Animation walkRight = new() { SpriteSheet = spriteSheet, Frames = [7, 11, 15, 11], Speed = 180f };
-    // AnimationController animationController = new();
-    // animationController.Animations.Add("WalkDown", walkDown);
-    // animationController.Animations.Add("WalkUp", walkUp);
-    // animationController.Animations.Add("WalkLeft", walkLeft);
-    // animationController.Animations.Add("WalkRight", walkRight);
-    // animationController.PlayAnimation("WalkRight");
-    // ninja.AddChild(animationController);
-    // AddChild(ninja);
-
-
-    // Console.WriteLine(ninja.Serialize());
   }
 
 

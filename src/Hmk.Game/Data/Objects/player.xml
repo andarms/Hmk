@@ -8,7 +8,7 @@
   <Children>
     <GameObject Type="Hmk.Engine.Graphics.SpriteRenderer">
       <Position X="0" Y="0" />
-      <ResourceReference Property="Sprite" Path="Sprites/Actor/NinjaGreen/Idle" />
+      <ResourceReference Property="Sprite" Path="Sprites/Actor/NinjaGreen/SpriteSheet" />
       <Size X="0" Y="0" />
     </GameObject>
     <GameObject Type="Hmk.Game.Components.Player.PlayerMovement">
@@ -33,6 +33,104 @@
         <Size X="8" Y="8" />
         <Offset X="0" Y="0" />
       </Collider>
+    </GameObject>
+    <GameObject Type="Hmk.Engine.Graphics.AnimationController">
+      <Position X="0" Y="0" />
+      <Start>IdleDown</Start>
+      <Animations>
+        <Item Key="WalkDown">
+          <GameObject Type="Hmk.Engine.Graphics.Animation">
+            <Position X="0" Y="0" />
+            <Speed>180</Speed>
+            <ResourceReference Property="SpriteSheet" Path="Sprites/Actor/NinjaGreen/SpriteSheet" />
+            <Frames>
+              <Item>4</Item>
+              <Item>8</Item>
+              <Item>12</Item>
+              <Item>8</Item>
+            </Frames>
+          </GameObject>
+        </Item>
+        <Item Key="WalkUp">
+          <GameObject Type="Hmk.Engine.Graphics.Animation">
+            <Position X="0" Y="0" />
+            <Speed>180</Speed>
+            <ResourceReference Property="SpriteSheet" Path="Sprites/Actor/NinjaGreen/SpriteSheet" />
+            <Frames>
+              <Item>5</Item>
+              <Item>9</Item>
+              <Item>13</Item>
+              <Item>9</Item>
+            </Frames>
+          </GameObject>
+        </Item>
+        <Item Key="WalkLeft">
+          <GameObject Type="Hmk.Engine.Graphics.Animation">
+            <Position X="0" Y="0" />
+            <Speed>180</Speed>
+            <ResourceReference Property="SpriteSheet" Path="Sprites/Actor/NinjaGreen/SpriteSheet" />
+            <Frames>
+              <Item>6</Item>
+              <Item>10</Item>
+              <Item>14</Item>
+              <Item>10</Item>
+            </Frames>
+          </GameObject>
+        </Item>
+        <Item Key="WalkRight">
+          <GameObject Type="Hmk.Engine.Graphics.Animation">
+            <Position X="0" Y="0" />
+            <Speed>180</Speed>
+            <ResourceReference Property="SpriteSheet" Path="Sprites/Actor/NinjaGreen/SpriteSheet" />
+            <Frames>
+              <Item>7</Item>
+              <Item>11</Item>
+              <Item>15</Item>
+              <Item>11</Item>
+            </Frames>
+          </GameObject>
+        </Item>
+        <Item Key="IdleDown">
+          <GameObject Type="Hmk.Engine.Graphics.Animation">
+            <Position X="0" Y="0" />
+            <Speed>180</Speed>
+            <ResourceReference Property="SpriteSheet" Path="Sprites/Actor/NinjaGreen/SpriteSheet" />
+            <Frames>
+              <Item>0</Item>
+            </Frames>
+          </GameObject>
+        </Item>
+        <Item Key="IdleUp">
+          <GameObject Type="Hmk.Engine.Graphics.Animation">
+            <Position X="0" Y="0" />
+            <Speed>180</Speed>
+            <ResourceReference Property="SpriteSheet" Path="Sprites/Actor/NinjaGreen/SpriteSheet" />
+            <Frames>
+              <Item>1</Item>
+            </Frames>
+          </GameObject>
+        </Item>
+        <Item Key="IdleLeft">
+          <GameObject Type="Hmk.Engine.Graphics.Animation">
+            <Position X="0" Y="0" />
+            <Speed>180</Speed>
+            <ResourceReference Property="SpriteSheet" Path="Sprites/Actor/NinjaGreen/SpriteSheet" />
+            <Frames>
+              <Item>2</Item>
+            </Frames>
+          </GameObject>
+        </Item>
+        <Item Key="IdleRight">
+          <GameObject Type="Hmk.Engine.Graphics.Animation">
+            <Position X="0" Y="0" />
+            <Speed>180</Speed>
+            <ResourceReference Property="SpriteSheet" Path="Sprites/Actor/NinjaGreen/SpriteSheet" />
+            <Frames>
+              <Item>3</Item>
+            </Frames>
+          </GameObject>
+        </Item>
+      </Animations>
     </GameObject>
   </Children>
   <Traits>

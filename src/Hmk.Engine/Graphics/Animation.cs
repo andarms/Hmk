@@ -15,6 +15,8 @@ public class Animation : GameObject
 
   private int currentFrame = 0;
   private float timer = 0f;
+
+  [Save]
   public float Speed { get; set; } = 100f; // milliseconds per frame
 
   public override void Initialize()
