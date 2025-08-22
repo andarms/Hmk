@@ -25,10 +25,13 @@ public class NinePatchSprite : Resource, ISprite
   /// </summary>
   [Save]
   public float Left { get; set; }
+
   [Save]
   public float Top { get; set; }
+
   [Save]
   public float Right { get; set; }
+
   [Save]
   public float Bottom { get; set; }
 

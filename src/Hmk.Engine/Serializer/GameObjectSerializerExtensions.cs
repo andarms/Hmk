@@ -243,7 +243,7 @@ public static class GameObjectSerializerExtensions
   private static void DeserializeSavedProperties(GameObject gameObject, XElement parent)
   {
     var members = gameObject.GetType().GetProperties()
-      .Where(prop => Attribute.IsDefined(prop, typeof(SaveAttribute)) && prop.CanWrite);
+  .Where(prop => Attribute.IsDefined(prop, typeof(SaveAttribute)));
 
     foreach (var member in members)
     {
@@ -256,13 +256,89 @@ public static class GameObjectSerializerExtensions
       if (el == null) continue;
 
       var targetType = member.PropertyType;
-      object? value = DeserializeValueForType(targetType, el);
-      if (value != null || targetType.IsClass)
+
+      // If property is writable, use the generic value deserializer
+      if (member.CanWrite)
       {
-        try { member.SetValue(gameObject, value); }
-        catch { /* ignore assignment failures */ }
+        object? value = DeserializeValueForType(targetType, el);
+        if (value != null || targetType.IsClass)
+        {
+          try { member.SetValue(gameObject, value); }
+          catch { /* ignore assignment failures */ }
+        }
+        continue;
+      }
+
+      // Read-only [Save] property: support in-place population for common container types
+      var current = member.GetValue(gameObject);
+      if (current == null) continue;
+
+      // Handle Dictionary<K,V> patterns, e.g., AnimationController.Animations
+      var curType = current.GetType();
+      if (curType.IsGenericType && curType.GetGenericTypeDefinition() == typeof(Dictionary<,>))
+      {
+        var args = curType.GetGenericArguments();
+        var keyType = args[0];
+        var valType = args[1];
+
+        // Only support string keys for now
+        if (keyType == typeof(string))
+        {
+          var dict = (System.Collections.IDictionary)current;
+          foreach (var itemEl in el.Elements("Item"))
+          {
+            var key = itemEl.Attribute("Key")?.Value ?? string.Empty;
+
+            object? valueObj = null;
+            // Prefer first child element as complex value; else use Value attribute or inner text
+            var child = itemEl.Elements().FirstOrDefault();
+            if (child != null)
+            {
+              valueObj = DeserializeValueForType(valType, child);
+            }
+            else
+            {
+              var valueAttr = itemEl.Attribute("Value")?.Value;
+              var text = valueAttr ?? itemEl.Value;
+              valueObj = ConvertSimple(valType, text);
+            }
+
+            if (valueObj != null || valType.IsClass)
+            {
+              dict[key] = valueObj!;
+            }
+          }
+        }
+        continue;
+      }
+
+      // If it's a GameObject/Resource/ISerializable instance, try in-place deserialize
+      switch (current)
+      {
+        case Resource res:
+          res.Deserialize(el);
+          break;
+        case GameObject go:
+          go.Deserialize(el);
+          break;
+        case ISerializable serializable:
+          serializable.Deserialize(el);
+          break;
       }
     }
+  }
+
+  private static object? ConvertSimple(Type t, string? text)
+  {
+    text = text?.Trim() ?? string.Empty;
+    if (t == typeof(string)) return text;
+    if (t == typeof(int)) return int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out var i) ? i : 0;
+    if (t == typeof(float)) return float.TryParse(text, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var f) ? f : 0f;
+    if (t.IsEnum)
+    {
+      try { return Enum.Parse(t, text, ignoreCase: true); } catch { return null; }
+    }
+    try { return Convert.ChangeType(text, t, CultureInfo.InvariantCulture); } catch { return null; }
   }
 
   private static object? DeserializeValueForType(Type targetType, XElement element)

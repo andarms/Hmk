@@ -9,7 +9,7 @@
     <GameObject Type="Hmk.Engine.Graphics.SpriteRenderer">
       <Position X="0" Y="0" />
       <Resource Type="Hmk.Engine.Graphics.Sprite" Property="Sprite">
-        <TextureName>Sprites/TinyDungeon</TextureName>
+        <TextureName>Sprites/Actor/NinjaGreen/SpriteSheet</TextureName>
         <Source X="16" Y="112" Width="16" Height="16" />
         <Anchor X="0" Y="0" />
         <Tint R="255" G="255" B="255" A="255" />

@@ -51,11 +51,6 @@ public class GameplayScene : Scene
     // player.AddChild(hurtbox);
     // player.AddTrait(new HasInventory());
     // Console.WriteLine(player.Serialize());
-    // InventoryWindow inventoryWindow = new();
-    // float x = Viewport.X + Viewport.GetSize().X / 2 - inventoryWindow.WindowSize.X / 2;
-    // float y = Viewport.Y + Viewport.GetSize().Y / 2 - inventoryWindow.WindowSize.Y / 2;
-    // inventoryWindow.Position = new Vector2(x, y);
-    // AddChild(inventoryWindow, UILayer);
 
     var player2 = GameObjectSerializerExtensions.LoadFromXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Objects/player.xml"));
     AddChild(player2);
@@ -72,19 +67,38 @@ public class GameplayScene : Scene
     var signPost = GameObjectSerializerExtensions.LoadFromXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Objects/sign-post.xml"));
     AddChild(signPost);
 
+    var ninja = GameObjectSerializerExtensions.LoadFromXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data/Objects/ninja.xml"));
+    AddChild(ninja);
+
     SceneManager.AddScene(new InventoryScene(player2));
 
-    // InteractionTrigger trigger = new();
-    // trigger.SetCollider(new()
+    // SpriteSheet spriteSheet = new()
     // {
-    //   Size = new(8, 8),
-    //   Offset = new(0, 0)
-    // });
-    // player.AddChild(trigger);
+    //   TextureName = "Sprites/Actor/NinjaGreen/SpriteSheet",
+    //   FrameWidth = 16,
+    //   FrameHeight = 16
+    // };
+    // spriteSheet.SetFrame(4);
+    // GameObject ninja = new()
+    // {
+    //   Position = new Vector2(10, 100)
+    // };
+    // ninja.AddChild(new SpriteRenderer { Sprite = spriteSheet });
+    // Animation walkDown = new() { SpriteSheet = spriteSheet, Frames = [4, 8, 12, 8], Speed = 180f };
+    // Animation walkUp = new() { SpriteSheet = spriteSheet, Frames = [5, 9, 13, 9], Speed = 180f };
+    // Animation walkLeft = new() { SpriteSheet = spriteSheet, Frames = [6, 10, 14, 10], Speed = 180f };
+    // Animation walkRight = new() { SpriteSheet = spriteSheet, Frames = [7, 11, 15, 11], Speed = 180f };
+    // AnimationController animationController = new();
+    // animationController.Animations.Add("WalkDown", walkDown);
+    // animationController.Animations.Add("WalkUp", walkUp);
+    // animationController.Animations.Add("WalkLeft", walkLeft);
+    // animationController.Animations.Add("WalkRight", walkRight);
+    // animationController.PlayAnimation("WalkRight");
+    // ninja.AddChild(animationController);
+    // AddChild(ninja);
 
-    // Console.WriteLine(player.Serialize());
 
-
+    // Console.WriteLine(ninja.Serialize());
   }
 
 

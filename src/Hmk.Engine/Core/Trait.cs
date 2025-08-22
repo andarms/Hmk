@@ -54,19 +54,56 @@ public abstract class Trait : ISerializable
       }
       else
       {
-        // Read-only property: if it's a Resource/GameObject/ISerializable instance, try in-place deserialize
+        // Read-only property: attempt in-place population for dictionaries/containers or known serializable instances
         var current = prop.GetValue(this);
-        switch (current)
+        if (current == null) continue;
+
+        var curType = current.GetType();
+        if (curType.IsGenericType && curType.GetGenericTypeDefinition() == typeof(Dictionary<,>))
         {
-          case Resource res:
-            res.Deserialize(el);
-            break;
-          case GameObject go:
-            go.Deserialize(el);
-            break;
-          case ISerializable serializable:
-            serializable.Deserialize(el);
-            break;
+          var args = curType.GetGenericArguments();
+          var keyType = args[0];
+          var valType = args[1];
+          if (keyType == typeof(string))
+          {
+            var dict = (System.Collections.IDictionary)current;
+            foreach (var itemEl in el.Elements("Item"))
+            {
+              var key = itemEl.Attribute("Key")?.Value ?? string.Empty;
+              object? valueObj = null;
+              var child = itemEl.Elements().FirstOrDefault();
+              if (child != null)
+              {
+                valueObj = DeserializeValueForType(valType, child);
+              }
+              else
+              {
+                var valueAttr = itemEl.Attribute("Value")?.Value;
+                var text = valueAttr ?? itemEl.Value;
+                valueObj = DeserializeValueForType(valType, new XElement("Value", text));
+              }
+              if (valueObj != null || valType.IsClass)
+              {
+                dict[key] = valueObj!;
+              }
+            }
+          }
+        }
+        else
+        {
+          // Fallback for Resource/GameObject/ISerializable
+          switch (current)
+          {
+            case Resource res:
+              res.Deserialize(el);
+              break;
+            case GameObject go:
+              go.Deserialize(el);
+              break;
+            case ISerializable serializable:
+              serializable.Deserialize(el);
+              break;
+          }
         }
       }
     }

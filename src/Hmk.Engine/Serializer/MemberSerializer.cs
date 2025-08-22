@@ -31,26 +31,72 @@ public static class MemberSerializer
           continue;
         }
 
-        switch (item)
+        // Special handling for Dictionary<,> entries (KeyValuePair<K,V>)
+        var itemType = item.GetType();
+        if (itemType.IsGenericType && itemType.GetGenericTypeDefinition() == typeof(KeyValuePair<,>))
         {
-          case GameObject go:
-            parent.Add(go.Serialize());
-            break;
-          case Resource res:
-            parent.Add(res.Serialize());
-            break;
-          case Vector2 v:
-            parent.Add(v.Serialize("Item"));
-            break;
-          case Rectangle r:
-            parent.Add(r.Serialize("Item"));
-            break;
-          case Color c:
-            parent.Add(c.Serialize("Item"));
-            break;
-          default:
-            parent.Add(new XElement("Item", item.ToString()));
-            break;
+          var keyProp = itemType.GetProperty("Key");
+          var valueProp = itemType.GetProperty("Value");
+          var keyObj = keyProp?.GetValue(item);
+          var valObj = valueProp?.GetValue(item);
+
+          var itemElement = new XElement("Item");
+          if (keyObj != null)
+          {
+            itemElement.SetAttributeValue("Key", keyObj.ToString());
+          }
+
+          switch (valObj)
+          {
+            case GameObject goVal:
+              itemElement.Add(goVal.Serialize());
+              break;
+            case Resource resVal:
+              itemElement.Add(resVal.Serialize());
+              break;
+            case Vector2 vVal:
+              itemElement.Add(vVal.Serialize("Value"));
+              break;
+            case Rectangle rVal:
+              itemElement.Add(rVal.Serialize("Value"));
+              break;
+            case Color cVal:
+              itemElement.Add(cVal.Serialize("Value"));
+              break;
+            case null:
+              // nothing to add
+              break;
+            default:
+              // Fallback to attribute or inner text for simple values
+              itemElement.SetAttributeValue("Value", valObj.ToString());
+              break;
+          }
+
+          parent.Add(itemElement);
+        }
+        else
+        {
+          switch (item)
+          {
+            case GameObject go:
+              parent.Add(go.Serialize());
+              break;
+            case Resource res:
+              parent.Add(res.Serialize());
+              break;
+            case Vector2 v:
+              parent.Add(v.Serialize("Item"));
+              break;
+            case Rectangle r:
+              parent.Add(r.Serialize("Item"));
+              break;
+            case Color c:
+              parent.Add(c.Serialize("Item"));
+              break;
+            default:
+              parent.Add(new XElement("Item", item.ToString()));
+              break;
+          }
         }
       }
       return parent;
