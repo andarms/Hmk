@@ -14,8 +14,8 @@ public class Game
     SetTargetFPS(Settings.TargetFPS);
 
     ResourcesManager.Initialize();
-    SceneManager.Initialize();
     CollisionsManager.Initialize();
+    SceneManager.Initialize();
     var maps = InputMap.CreateDefault();
     maps.AddAction("Inventory").WithKey(KeyboardKey.I);
     maps.Apply();

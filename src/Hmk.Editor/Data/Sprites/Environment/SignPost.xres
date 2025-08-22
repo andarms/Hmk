@@ -1,0 +1,7 @@
+<Resource Type="Hmk.Engine.Graphics.Sprite" Key="Sprites/Environment/SignPost">
+  <TextureName>Sprites/TinyDungeon</TextureName>
+  <Source X="112" Y="16" Width="16" Height="16" />
+  <Anchor X="0" Y="0" />
+  <Tint R="255" G="255" B="255" A="255" />
+  <Rotation>0</Rotation>
+</Resource>
