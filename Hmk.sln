@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hmk.Game", "src\Hmk.Game\Hm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hmk.Engine", "src\Hmk.Engine\Hmk.Engine.csproj", "{93B190DD-3928-4D99-86A9-7DF891A3817A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hmk.Editor", "src\Hmk.Editor\Hmk.Editor.csproj", "{9F1F68A5-8D4C-4EFA-9478-93B458EE4C77}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,18 @@ Global
 		{93B190DD-3928-4D99-86A9-7DF891A3817A}.Release|x64.Build.0 = Release|Any CPU
 		{93B190DD-3928-4D99-86A9-7DF891A3817A}.Release|x86.ActiveCfg = Release|Any CPU
 		{93B190DD-3928-4D99-86A9-7DF891A3817A}.Release|x86.Build.0 = Release|Any CPU
+		{9F1F68A5-8D4C-4EFA-9478-93B458EE4C77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F1F68A5-8D4C-4EFA-9478-93B458EE4C77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F1F68A5-8D4C-4EFA-9478-93B458EE4C77}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9F1F68A5-8D4C-4EFA-9478-93B458EE4C77}.Debug|x64.Build.0 = Debug|Any CPU
+		{9F1F68A5-8D4C-4EFA-9478-93B458EE4C77}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9F1F68A5-8D4C-4EFA-9478-93B458EE4C77}.Debug|x86.Build.0 = Debug|Any CPU
+		{9F1F68A5-8D4C-4EFA-9478-93B458EE4C77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F1F68A5-8D4C-4EFA-9478-93B458EE4C77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F1F68A5-8D4C-4EFA-9478-93B458EE4C77}.Release|x64.ActiveCfg = Release|Any CPU
+		{9F1F68A5-8D4C-4EFA-9478-93B458EE4C77}.Release|x64.Build.0 = Release|Any CPU
+		{9F1F68A5-8D4C-4EFA-9478-93B458EE4C77}.Release|x86.ActiveCfg = Release|Any CPU
+		{9F1F68A5-8D4C-4EFA-9478-93B458EE4C77}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,5 +64,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{52E3EE34-2226-4377-8533-033907A5F9E5} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{93B190DD-3928-4D99-86A9-7DF891A3817A} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{9F1F68A5-8D4C-4EFA-9478-93B458EE4C77} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 	EndGlobalSection
 EndGlobal

@@ -1,5 +1,6 @@
 using System.Numerics;
 using Hmk.Engine.Collision;
+using Hmk.Engine.Debug;
 
 namespace Hmk.Engine.Core;
 
@@ -35,7 +36,10 @@ public class GameObject
   public virtual void Draw()
   {
     Children.ForEach(child => child.Draw());
-    this.DebugCollider();
+    if (DebugManager.Active)
+    {
+      this.DebugCollider();
+    }
   }
 
   public virtual void Terminate()

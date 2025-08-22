@@ -7,6 +7,11 @@ public static class ResourceManager
   public static void Initialize()
   {
     string resourcePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
+    if (!Directory.Exists(resourcePath))
+    {
+      // No Data directory present; skip loading resources.
+      return;
+    }
     string[] textureFiles = Directory.GetFiles(resourcePath, "*.png", SearchOption.AllDirectories);
     foreach (var file in textureFiles)
     {

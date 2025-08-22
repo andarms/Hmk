@@ -1,4 +1,5 @@
 using Hmk.Engine.Collision;
+using Hmk.Engine.Debug;
 using Hmk.Engine.Input;
 using Hmk.Engine.Resources;
 using Hmk.Engine.Scenes;
@@ -47,5 +48,6 @@ public class Game
     float dt = GetFrameTime();
     CollisionsManager.Update();
     SceneManager.Update(dt);
+    DebugManager.Update(dt);
   }
 }
