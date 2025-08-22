@@ -48,7 +48,7 @@ public class NinePatchSprite : Resource, ISprite
   [Save]
   public float Rotation { get; set; } = 0f;
 
-  private Texture2D Texture => ResourceManager.Textures[TextureName];
+  private Texture2D Texture => ResourcesManager.Textures[TextureName];
 
   /// <summary>
   /// Draw the nine-slice to a destination rectangle using this resource settings.

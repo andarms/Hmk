@@ -1,4 +1,5 @@
 using Hmk.Engine.Core;
+using Hmk.Engine.Resources;
 using Hmk.Engine.Serializer;
 
 namespace Hmk.Engine.Graphics;
@@ -7,7 +8,7 @@ namespace Hmk.Engine.Graphics;
 public class Animation : GameObject
 {
   [Save]
-  public SpriteSheet SpriteSheet { get; set; } = null!;
+  public ResourceReference<SpriteSheet> SpriteSheet { get; set; } = null!;
 
   [Save]
   public List<int> Frames { get; set; } = [];
@@ -23,7 +24,7 @@ public class Animation : GameObject
     ArgumentNullException.ThrowIfNull(Frames, nameof(Frames));
 
     currentFrame = 0;
-    SpriteSheet.SetFrame(Frames[currentFrame]);
+    SpriteSheet.Value.SetFrame(Frames[currentFrame]);
   }
 
   public override void Update(float dt)
@@ -34,7 +35,7 @@ public class Animation : GameObject
     if (timer >= Speed / 1000f)
     {
       currentFrame = (currentFrame + 1) % Frames.Count;
-      SpriteSheet.SetFrame(Frames[currentFrame]);
+      SpriteSheet.Value.SetFrame(Frames[currentFrame]);
       timer = 0f;
     }
   }

@@ -13,6 +13,28 @@ public abstract class Resource : ISerializable
   {
     ArgumentNullException.ThrowIfNull(element);
 
+    // If this element is a reference to another Resource, copy values from referenced instance
+    var refKey = element.Attribute("Ref")?.Value ?? element.Attribute("Path")?.Value;
+    if (!string.IsNullOrWhiteSpace(refKey) && ResourcesManager.Resources.TryGetValue(refKey!, out var referenced))
+    {
+      // Copy [Save]-annotated properties from the referenced instance to this instance
+      var refProps = referenced.GetType().GetProperties()
+        .Where(p => Attribute.IsDefined(p, typeof(SaveAttribute)) && p.CanRead);
+      foreach (var prop in refProps)
+      {
+        try
+        {
+          var targetProp = GetType().GetProperty(prop.Name);
+          if (targetProp != null && targetProp.CanWrite && targetProp.PropertyType.IsAssignableFrom(prop.PropertyType))
+          {
+            targetProp.SetValue(this, prop.GetValue(referenced));
+          }
+        }
+        catch { }
+      }
+      // Continue to allow local overrides below
+    }
+
     var props = GetType().GetProperties()
       .Where(p => Attribute.IsDefined(p, typeof(SaveAttribute)) && p.CanWrite);
 
@@ -48,6 +70,25 @@ public abstract class Resource : ISerializable
 
   private static object? DeserializeValueForType(Type targetType, XElement element)
   {
+    // Support lightweight <ResourceRef Path="key" /> or <ResourceRef>key</ResourceRef>
+    if (typeof(Resource).IsAssignableFrom(targetType))
+    {
+      if (string.Equals(element.Name.LocalName, "ResourceRef", StringComparison.Ordinal))
+      {
+        var key = element.Attribute("Path")?.Value ?? element.Attribute("Ref")?.Value ?? element.Value;
+        if (!string.IsNullOrWhiteSpace(key) && ResourcesManager.Resources.TryGetValue(key!, out var found))
+        {
+          return found;
+        }
+      }
+      // Also allow any element carrying Ref/Path to mean reference
+      var refKey = element.Attribute("Ref")?.Value ?? element.Attribute("Path")?.Value;
+      if (!string.IsNullOrWhiteSpace(refKey) && ResourcesManager.Resources.TryGetValue(refKey!, out var referenced))
+      {
+        return referenced;
+      }
+    }
+
     // Handle explicit type hint on the element for polymorphic/interface targets
     // e.g., a property typed as an interface where the XML contains Type="ConcreteType"
     var explicitTypeName = element.Attribute("Type")?.Value;

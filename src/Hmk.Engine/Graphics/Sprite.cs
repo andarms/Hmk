@@ -20,7 +20,7 @@ public class Sprite : Resource, ISprite
   [Save]
   public float Rotation { get; set; } = 0;
 
-  private Texture2D Texture => ResourceManager.Textures[TextureName];
+  private Texture2D Texture => ResourcesManager.Textures[TextureName];
 
   public void Draw(Rectangle destination)
   {

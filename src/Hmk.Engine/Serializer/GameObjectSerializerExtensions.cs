@@ -343,6 +343,46 @@ public static class GameObjectSerializerExtensions
 
   private static object? DeserializeValueForType(Type targetType, XElement element)
   {
+    // Resource reference via <ResourceRef Path="..."/> or Ref/Path attribute on element
+    var isRefElement = string.Equals(element.Name.LocalName, "ResourceRef", StringComparison.Ordinal)
+                       || element.Attribute("Ref") != null
+                       || element.Attribute("Path") != null;
+    if (isRefElement)
+    {
+      var key = element.Attribute("Path")?.Value ?? element.Attribute("Ref")?.Value ?? element.Value;
+      key = key?.Trim();
+      if (!string.IsNullOrWhiteSpace(key))
+      {
+        if (ResourcesManager.Resources.TryGetValue(key!, out var foundRes))
+        {
+          // If the target type is a ResourceReference<T>, construct one and set Path.
+          if (targetType.IsGenericType && targetType.GetGenericTypeDefinition() == typeof(Hmk.Engine.Resources.ResourceReference<>))
+          {
+            try
+            {
+              var wrapper = Activator.CreateInstance(targetType);
+              var pathProp = targetType.GetProperty("Path");
+              pathProp?.SetValue(wrapper, key);
+              return wrapper;
+            }
+            catch { /* fallthrough */ }
+          }
+
+          // If the referenced resource instance can be assigned to the target type (including interfaces like ISprite), return it directly.
+          if (targetType.IsInstanceOfType(foundRes))
+          {
+            return foundRes;
+          }
+
+          // If the target expects a Resource base, also return
+          if (typeof(Resources.Resource).IsAssignableFrom(targetType))
+          {
+            return foundRes;
+          }
+        }
+      }
+    }
+
     // Polymorphic/interface handling via explicit Type attribute on the element
     var explicitTypeName = element.Attribute("Type")?.Value;
     if (!string.IsNullOrWhiteSpace(explicitTypeName))

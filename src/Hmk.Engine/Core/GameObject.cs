@@ -1,6 +1,6 @@
 using System.Numerics;
 using Hmk.Engine.Collision;
-using Hmk.Engine.Debug;
+using Hmk.Engine.Debugging;
 
 namespace Hmk.Engine.Core;
 

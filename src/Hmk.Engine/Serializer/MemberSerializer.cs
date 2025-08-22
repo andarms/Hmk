@@ -102,14 +102,37 @@ public static class MemberSerializer
       return parent;
     }
 
+    // Special case: ResourceReference<T> wrapper -> emit a ResourceRef with Path
+    var valueType = value.GetType();
+    if (valueType.IsGenericType && valueType.GetGenericTypeDefinition() == typeof(ResourceReference<>))
+    {
+      var pathProp = valueType.GetProperty("Path");
+      var path = pathProp?.GetValue(value)?.ToString() ?? string.Empty;
+      var el = new XElement("ResourceRef");
+      el.SetAttributeValue("Property", memberName);
+      el.SetAttributeValue("Path", path);
+      return el;
+    }
+
+    // If the value is a Resource instance that is present in the ResourcesManager by some key, prefer referencing
+    if (value is Resource resInst)
+    {
+      var key = ResourcesManager.Resources.FirstOrDefault(kv => ReferenceEquals(kv.Value, resInst)).Key;
+      if (!string.IsNullOrEmpty(key))
+      {
+        var el = new XElement("ResourceRef");
+        el.SetAttributeValue("Property", memberName);
+        el.SetAttributeValue("Path", key);
+        return el;
+      }
+      // Fallback to full serialization if not found in registry
+      return resInst.Serialize().WithAttribute("Property", memberName);
+    }
+
     return value switch
     {
       GameObject gameObject =>
         gameObject
-        .Serialize()
-        .WithAttribute("Property", memberName),
-      Resource resource =>
-        resource
         .Serialize()
         .WithAttribute("Property", memberName),
       Vector2 vector => vector.Serialize(memberName),

@@ -24,7 +24,7 @@ public class SpriteRenderer : GameObject
   public override void Initialize()
   {
     ArgumentNullException.ThrowIfNull(Sprite, nameof(Sprite));
-    if (string.IsNullOrEmpty(Sprite.TextureName) || !ResourceManager.Textures.ContainsKey(Sprite.TextureName))
+    if (string.IsNullOrEmpty(Sprite.TextureName) || !ResourcesManager.Textures.ContainsKey(Sprite.TextureName))
     {
       throw new ArgumentException("Sprite must have a valid TextureName.", nameof(Sprite));
     }

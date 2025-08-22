@@ -16,7 +16,7 @@ public class SpriteSheet : Resource, ISprite
   [Save]
   public int FrameHeight { get; set; } = 1;
 
-  Texture2D Texture => ResourceManager.Textures[TextureName];
+  Texture2D Texture => ResourcesManager.Textures[TextureName];
   int TotalFrames => Texture.Width / FrameWidth * (Texture.Height / FrameHeight);
 
   public Rectangle Source { get; set; } = new Rectangle(0, 0, 0, 0);

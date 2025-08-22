@@ -1,5 +1,4 @@
 using Hmk.Engine.Core;
-using System.Linq;
 using Hmk.Engine.Serializer;
 
 namespace Hmk.Engine.Graphics;
@@ -19,13 +18,6 @@ public class AnimationController : GameObject
     if (Animations.TryGetValue(animationName, out var animation))
     {
       currentAnimation = animation;
-      // Ensure the SpriteRenderer uses the same SpriteSheet instance as the animation
-      var renderer = FindRenderer();
-      if (renderer != null)
-      {
-        renderer.Sprite = currentAnimation.SpriteSheet;
-      }
-
       currentAnimation.Initialize();
     }
   }
@@ -48,13 +40,5 @@ public class AnimationController : GameObject
   public override void Update(float dt)
   {
     currentAnimation?.Update(dt);
-  }
-
-  private SpriteRenderer? FindRenderer()
-  {
-    // Prefer a sibling SpriteRenderer on the same parent; fall back to a child
-    var sibling = Parent?.Children.OfType<SpriteRenderer>().FirstOrDefault();
-    if (sibling != null) return sibling as SpriteRenderer;
-    return Children.OfType<SpriteRenderer>().FirstOrDefault();
   }
 }
