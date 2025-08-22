@@ -343,10 +343,11 @@ public static class GameObjectSerializerExtensions
 
   private static object? DeserializeValueForType(Type targetType, XElement element)
   {
-    // Resource reference via <ResourceRef Path="..."/> or Ref/Path attribute on element
-    var isRefElement = string.Equals(element.Name.LocalName, "ResourceRef", StringComparison.Ordinal)
-                       || element.Attribute("Ref") != null
-                       || element.Attribute("Path") != null;
+    // Resource reference via <ResourceReference Path="..."/> (preferred) or legacy <ResourceRef/>, or Ref/Path attribute on element
+    var isRefElement = string.Equals(element.Name.LocalName, "ResourceReference", StringComparison.Ordinal)
+               || string.Equals(element.Name.LocalName, "ResourceRef", StringComparison.Ordinal)
+                         || element.Attribute("Ref") != null
+                         || element.Attribute("Path") != null;
     if (isRefElement)
     {
       var key = element.Attribute("Path")?.Value ?? element.Attribute("Ref")?.Value ?? element.Value;

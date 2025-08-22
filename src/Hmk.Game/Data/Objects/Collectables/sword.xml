@@ -7,13 +7,7 @@
   <Children>
     <GameObject Type="Hmk.Engine.Graphics.SpriteRenderer">
       <Position X="0" Y="0" />
-      <Resource Type="Hmk.Engine.Graphics.Sprite" Property="Sprite">
-        <TextureName>Sprites/TinyDungeon</TextureName>
-        <Source X="128" Y="128" Width="16" Height="16" />
-        <Anchor X="0" Y="0" />
-        <Tint R="255" G="255" B="255" A="255" />
-        <Rotation>0</Rotation>
-      </Resource>
+      <ResourceReference Property="Sprite" Path="Sprites/Items/Sword" />
       <Size X="0" Y="0" />
     </GameObject>
   </Children>
@@ -22,13 +16,7 @@
       <Resource Type="Hmk.Engine.Systems.Inventory.Item" Property="Item">
         <Name>Sword</Name>
         <Description>A sharp blade.</Description>
-        <Resource Type="Hmk.Engine.Graphics.Sprite" Property="Sprite">
-          <TextureName>Sprites/TinyDungeon</TextureName>
-          <Source X="128" Y="128" Width="16" Height="16" />
-          <Anchor X="0" Y="0" />
-          <Tint R="255" G="255" B="255" A="255" />
-          <Rotation>0</Rotation>
-        </Resource>
+        <ResourceReference Property="Sprite" Path="Sprites/Items/Sword" />
       </Resource>
       <AutoCollectionAllowed>True</AutoCollectionAllowed>
     </Trait>

@@ -70,10 +70,10 @@ public abstract class Resource : ISerializable
 
   private static object? DeserializeValueForType(Type targetType, XElement element)
   {
-    // Support lightweight <ResourceRef Path="key" /> or <ResourceRef>key</ResourceRef>
+    // Support lightweight <ResourceReference Path="key" /> or legacy <ResourceRef>key</ResourceRef>
     if (typeof(Resource).IsAssignableFrom(targetType))
     {
-      if (string.Equals(element.Name.LocalName, "ResourceRef", StringComparison.Ordinal))
+      if (string.Equals(element.Name.LocalName, "ResourceReference", StringComparison.Ordinal) || string.Equals(element.Name.LocalName, "ResourceRef", StringComparison.Ordinal))
       {
         var key = element.Attribute("Path")?.Value ?? element.Attribute("Ref")?.Value ?? element.Value;
         if (!string.IsNullOrWhiteSpace(key) && ResourcesManager.Resources.TryGetValue(key!, out var found))

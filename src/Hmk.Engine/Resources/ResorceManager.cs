@@ -55,7 +55,7 @@ public static class ResourcesManager
         var typeAttr = root.Attribute("Type")?.Value;
         if (string.IsNullOrWhiteSpace(typeAttr))
         {
-          // Allow <ResourceRef Path="..."/> to alias another key
+          // Allow <ResourceReference Path="..."/> or legacy <ResourceRef/> to alias another key
           var alias = root.Attribute("Ref")?.Value ?? root.Attribute("Path")?.Value;
           if (!string.IsNullOrWhiteSpace(alias) && Resources.TryGetValue(alias!, out var aliased))
           {

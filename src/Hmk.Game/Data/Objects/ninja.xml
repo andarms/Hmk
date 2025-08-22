@@ -3,7 +3,7 @@
   <Children>
     <GameObject Type="Hmk.Engine.Graphics.SpriteRenderer">
       <Position X="0" Y="0" />
-      <ResourceRef Property="Sprite" Path="Sprites/Actor/NinjaGreen/SpriteSheet" />
+      <ResourceReference Property="Sprite" Path="Sprites/Actor/NinjaGreen/SpriteSheet" />
       <Size X="0" Y="0" />
     </GameObject>
     <GameObject Type="Hmk.Engine.Graphics.AnimationController">
@@ -13,7 +13,7 @@
         <Item Key="WalkDown">
           <GameObject Type="Hmk.Engine.Graphics.Animation">
             <Position X="0" Y="0" />
-            <ResourceRef Property="SpriteSheet" Path="Sprites/Actor/NinjaGreen/SpriteSheet" />
+            <ResourceReference Property="SpriteSheet" Path="Sprites/Actor/NinjaGreen/SpriteSheet" />
             <Frames>
               <Item>4</Item>
               <Item>8</Item>
@@ -25,7 +25,7 @@
         <Item Key="WalkUp">
           <GameObject Type="Hmk.Engine.Graphics.Animation">
             <Position X="0" Y="0" />
-            <ResourceRef Property="SpriteSheet" Path="Sprites/Actor/NinjaGreen/SpriteSheet" />
+            <ResourceReference Property="SpriteSheet" Path="Sprites/Actor/NinjaGreen/SpriteSheet" />
             <Frames>
               <Item>5</Item>
               <Item>9</Item>
@@ -37,7 +37,7 @@
         <Item Key="WalkLeft">
           <GameObject Type="Hmk.Engine.Graphics.Animation">
             <Position X="0" Y="0" />
-            <ResourceRef Property="SpriteSheet" Path="Sprites/Actor/NinjaGreen/SpriteSheet" />
+            <ResourceReference Property="SpriteSheet" Path="Sprites/Actor/NinjaGreen/SpriteSheet" />
             <Frames>
               <Item>6</Item>
               <Item>10</Item>
@@ -49,7 +49,7 @@
         <Item Key="WalkRight">
           <GameObject Type="Hmk.Engine.Graphics.Animation">
             <Position X="0" Y="0" />
-            <ResourceRef Property="SpriteSheet" Path="Sprites/Actor/NinjaGreen/SpriteSheet" />
+            <ResourceReference Property="SpriteSheet" Path="Sprites/Actor/NinjaGreen/SpriteSheet" />
             <Frames>
               <Item>7</Item>
               <Item>11</Item>

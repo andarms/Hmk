@@ -102,13 +102,13 @@ public static class MemberSerializer
       return parent;
     }
 
-    // Special case: ResourceReference<T> wrapper -> emit a ResourceRef with Path
+    // Special case: ResourceReference<T> wrapper -> emit a ResourceReference with Path
     var valueType = value.GetType();
     if (valueType.IsGenericType && valueType.GetGenericTypeDefinition() == typeof(ResourceReference<>))
     {
       var pathProp = valueType.GetProperty("Path");
       var path = pathProp?.GetValue(value)?.ToString() ?? string.Empty;
-      var el = new XElement("ResourceRef");
+      var el = new XElement("ResourceReference");
       el.SetAttributeValue("Property", memberName);
       el.SetAttributeValue("Path", path);
       return el;
@@ -120,7 +120,7 @@ public static class MemberSerializer
       var key = ResourcesManager.Resources.FirstOrDefault(kv => ReferenceEquals(kv.Value, resInst)).Key;
       if (!string.IsNullOrEmpty(key))
       {
-        var el = new XElement("ResourceRef");
+        var el = new XElement("ResourceReference");
         el.SetAttributeValue("Property", memberName);
         el.SetAttributeValue("Path", key);
         return el;
