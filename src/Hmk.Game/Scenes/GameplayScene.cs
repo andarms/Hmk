@@ -76,6 +76,14 @@ public class GameplayScene : Scene
       Source = new(16, 112, 16, 16)
     };
     SceneManager.AddScene(new SpriteEditorScene(sprite));
+
+    SpriteSheet sheet = new()
+    {
+      TextureName = "Sprites/TinyDungeon",
+      FrameWidth = 16,
+      FrameHeight = 16
+    };
+    SceneManager.AddScene(new SpriteSheetEditorScene(sheet));
   }
 
 
@@ -90,6 +98,10 @@ public class GameplayScene : Scene
     if (IsKeyPressed(KeyboardKey.F2))
     {
       SceneManager.PushScene<SpriteEditorScene>();
+    }
+    if (IsKeyPressed(KeyboardKey.F3))
+    {
+      SceneManager.PushScene<SpriteSheetEditorScene>();
     }
   }
 

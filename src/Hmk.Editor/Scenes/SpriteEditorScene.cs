@@ -1,6 +1,5 @@
 using System.Numerics;
 using Hmk.Engine.Graphics;
-using Hmk.Engine.Input;
 using Hmk.Engine.Resources;
 using Hmk.Engine.Scenes;
 using IconFonts;
@@ -38,15 +37,6 @@ public class SpriteEditorScene : Scene
     float x = Viewport.X + Viewport.GetSize().X / 2 - texture.Width / 2;
     float y = Viewport.Y + Viewport.GetSize().Y / 2 - texture.Height / 2;
     position = new Vector2(x, y);
-  }
-
-  public override void Update(float dt)
-  {
-    base.Update(dt);
-    if (InputManager.JustPressed("Inventory"))
-    {
-      SceneManager.PopScene();
-    }
   }
 
   public Rectangle Selection => new(sprite.Source.X + position.X, sprite.Source.Y + position.Y, sprite.Source.Width, sprite.Source.Height);
@@ -99,7 +89,7 @@ public class SpriteEditorScene : Scene
     sprite.Source = DrawRectangleInspector(sprite.Source);
 
     ImGui.Spacing();
-    ImGui.TextColored(new Vector4(1, 1, 1, 1), "Texure");
+    ImGui.TextColored(new Vector4(1, 1, 1, 1), "Texture");
     ImGui.Separator();
     ImGui.PopItemWidth();
 
@@ -173,9 +163,6 @@ public class SpriteEditorScene : Scene
     {
       Console.WriteLine(sprite.Serialize());
     }
-
-
-
 
     ImGui.End();
   }
