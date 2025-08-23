@@ -1,5 +1,0 @@
-<Resource Type="Hmk.Engine.Graphics.SpriteSheet" Key="Sprites/Actor/NinjaGreen/SpriteSheet">
-  <TextureName>Sprites/Actor/NinjaGreen/SpriteSheet</TextureName>
-  <FrameWidth>16</FrameWidth>
-  <FrameHeight>16</FrameHeight>
-</Resource>

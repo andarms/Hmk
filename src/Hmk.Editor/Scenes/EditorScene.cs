@@ -10,6 +10,15 @@ public class EditorScene : Scene
 {
   private bool playing = false;
 
+  public List<string> layersNames = [
+    "Background",
+    "Midground",
+    "Foreground",
+    "UI"
+  ];
+
+  public string searchText = string.Empty;
+
   public EditorScene() : base()
   {
   }
@@ -17,7 +26,7 @@ public class EditorScene : Scene
   public override void OnEnter()
   {
     base.OnEnter();
-    rlImGui.Setup(false);
+    rlImGui.Setup(true);
   }
 
 
@@ -106,22 +115,48 @@ public class EditorScene : Scene
       ImGui.SetNextWindowSize(new(256, Viewport.Height - 20));
       ImGui.Begin("Toolbar", ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoTitleBar);
 
-      if (ImGui.Button($"{FontAwesome6.Eye}", new(20, 20)))
-      {
-        // Handle asset management here
-      }
-      ImGui.SameLine(0, 1);
-      if (ImGui.Button($"Game Objects", new(198, 20)))
-      {
-        // Handle asset deletion here
-      }
-      ImGui.SameLine(0, 1);
-      if (ImGui.Button($"{FontAwesome6.Plus}", new(20, 20)))
-      {
-        // Handle asset deletion here
-      }
+      // add input
+      ImGui.InputText(" ", ref searchText, 200);
 
       // Treeview of all aviable textures
+
+      foreach (var layerName in layersNames)
+      {
+        ImGui.PushID(layerName);
+        if (ImGui.Button($"{FontAwesome6.Eye}", new(20, 20)))
+        {
+          // Handle asset management here
+        }
+        ImGui.PopID();
+        ImGui.SameLine(0, 1);
+        if (ImGui.TreeNode(layerName))
+        {
+          // Here you would list all game objects in the current layer
+          ImGui.Text("Game Object 1");
+          ImGui.Text("Game Object 2");
+          ImGui.TreePop();
+        }
+      }
+
+      if (ImGui.Button("1", new(20, 20)))
+      {
+
+      }
+      ImGui.SameLine(0, 1);
+      if (ImGui.Button("2", new(20, 20)))
+      {
+
+      }
+      ImGui.SameLine(0, 1);
+      if (ImGui.Button("3", new(20, 20)))
+      {
+
+      }
+      ImGui.SameLine(0, 1);
+      if (ImGui.Button(FontAwesome6.UserAstronaut, new(20, 20)))
+      {
+        playing = false;
+      }
 
       ImGui.End();
     }

@@ -19,7 +19,6 @@ public class AnimationController : GameObject
 
     if (currentAnimationName == animationName) return;
     currentAnimationName = animationName;
-    Console.WriteLine($"Playing animation: {currentAnimationName}");
     if (Animations.TryGetValue(currentAnimationName, out var animation))
     {
       currentAnimation = animation;
