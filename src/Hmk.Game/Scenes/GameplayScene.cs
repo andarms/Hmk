@@ -1,4 +1,5 @@
 using System.Numerics;
+using Hmk.Editor.Scenes;
 using Hmk.Engine.Collision;
 using Hmk.Engine.Core;
 using Hmk.Engine.Graphics;
@@ -88,7 +89,7 @@ public class GameplayScene : Scene
 
     if (IsKeyPressed(KeyboardKey.F2))
     {
-      SceneManager.SwitchTo<SpriteEditorScene>();
+      SceneManager.PushScene<SpriteEditorScene>();
     }
   }
 

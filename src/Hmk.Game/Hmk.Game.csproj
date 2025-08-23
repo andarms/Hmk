@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../Hmk.Engine/Hmk.Engine.csproj" />
+    <ProjectReference Include="..\Hmk.Editor\Hmk.Editor.csproj" />
   </ItemGroup>
 
   <ItemGroup>

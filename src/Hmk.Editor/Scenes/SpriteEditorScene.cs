@@ -1,15 +1,13 @@
 using System.Numerics;
-using Hmk.Engine.Core;
 using Hmk.Engine.Graphics;
 using Hmk.Engine.Input;
 using Hmk.Engine.Resources;
 using Hmk.Engine.Scenes;
-using Hmk.Engine.Systems.Inventory;
 using IconFonts;
 using ImGuiNET;
 using rlImGui_cs;
 
-namespace Hmk.Game.Scenes;
+namespace Hmk.Editor.Scenes;
 
 public class SpriteEditorScene : Scene
 {
@@ -56,8 +54,11 @@ public class SpriteEditorScene : Scene
   public override void Draw()
   {
     ClearBackground(Color.Black);
+
     rlImGui.Begin();
     BeginMode2D(Viewport.Camera);
+
+    base.Draw();
 
     DrawRectangleV(position, new Vector2(texture.Width, texture.Height), Color.Magenta);
 
@@ -66,9 +67,11 @@ public class SpriteEditorScene : Scene
       new Rectangle(0, 0, texture.Width, texture.Height),
       new Rectangle(position.X, position.Y, texture.Width, texture.Height), Vector2.Zero, 0, sprite.Tint);
 
-    DrawRectangleLinesEx(Selection, 2, Color.Green);
+    DrawRectangleLinesEx(Selection, 1, Color.Green);
+    DrawRectangleRec(Selection, Fade(Color.Lime, 0.25f));
 
-    base.Draw();
+    DrawCircleV(sprite.Anchor + position + sprite.Source.Position, 2, Color.Red);
+
     DrawInspector();
     EndMode2D();
     rlImGui.End();
@@ -80,32 +83,20 @@ public class SpriteEditorScene : Scene
     ImGui.SetNextWindowSize(new(256, Viewport.Height));
     ImGui.Begin("#Inspector", ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoTitleBar);
 
+    ImGui.TextColored(new Vector4(1, 1, 1, 1), sprite.TextureName);
+    ImGui.SameLine(226);
+    if (ImGui.Button($"{FontAwesome6.Xmark}", new(20)))
+    {
+      SceneManager.PopScene();
+    }
+    ImGui.Spacing();
+    ImGui.Spacing();
+    ImGui.Spacing();
+    ImGui.Spacing();
+
     ImGui.PushItemWidth(156);
 
-    float sourceX = sprite.Source.X;
-    float sourceY = sprite.Source.Y;
-    ImGui.TextColored(new Vector4(1, 1, 1, 1), "Position");
-    ImGui.Separator();
-    ImGui.TextColored(new Vector4(0.8f, 0.8f, 0.8f, 1), "X:");
-    ImGui.SameLine(90);
-    ImGui.InputFloat("##positionx", ref sourceX, 8, 16, "%.2f");
-    ImGui.TextColored(new Vector4(0.8f, 0.8f, 0.8f, 1), "Y:");
-    ImGui.SameLine(90);
-    ImGui.InputFloat("##positiony", ref sourceY, 8, 16, "%.2f");
-    sprite.Source = new Rectangle(sourceX, sourceY, sprite.Source.Width, sprite.Source.Height);
-
-    //Size
-    float sourceWidth = sprite.Source.Width;
-    float sourceHeight = sprite.Source.Height;
-    ImGui.TextColored(new Vector4(1, 1, 1, 1), "Size");
-    ImGui.Separator();
-    ImGui.TextColored(new Vector4(0.8f, 0.8f, 0.8f, 1), "Width:");
-    ImGui.SameLine(90);
-    ImGui.InputFloat("##positionwidth", ref sourceWidth, 8, 16, "%.2f");
-    ImGui.TextColored(new Vector4(0.8f, 0.8f, 0.8f, 1), "Height:");
-    ImGui.SameLine(90);
-    ImGui.InputFloat("##positionheight", ref sourceHeight, 8, 16, "%.2f");
-    sprite.Source = new Rectangle(sprite.Source.X, sprite.Source.Y, sourceWidth, sourceHeight);
+    sprite.Source = DrawRectangleInspector(sprite.Source);
 
     ImGui.Spacing();
     ImGui.TextColored(new Vector4(1, 1, 1, 1), "Texure");
@@ -184,6 +175,37 @@ public class SpriteEditorScene : Scene
     }
 
 
+
+
     ImGui.End();
+  }
+
+  private Rectangle DrawRectangleInspector(Rectangle rectangle)
+  {
+    float x = rectangle.X;
+    float y = rectangle.Y;
+    float width = rectangle.Width;
+    float height = rectangle.Height;
+
+    ImGui.TextColored(new Vector4(1, 1, 1, 1), "Position");
+    ImGui.Separator();
+    ImGui.TextColored(new Vector4(0.8f, 0.8f, 0.8f, 1), "X:");
+    ImGui.SameLine(90);
+    ImGui.InputFloat("##positionx", ref x, 8, 16, "%.2f");
+    ImGui.TextColored(new Vector4(0.8f, 0.8f, 0.8f, 1), "Y:");
+    ImGui.SameLine(90);
+    ImGui.InputFloat("##positiony", ref y, 8, 16, "%.2f");
+
+
+    ImGui.TextColored(new Vector4(1, 1, 1, 1), "Size");
+    ImGui.Separator();
+    ImGui.TextColored(new Vector4(0.8f, 0.8f, 0.8f, 1), "Width:");
+    ImGui.SameLine(90);
+    ImGui.InputFloat("##positionwidth", ref width, 8, 16, "%.2f");
+    ImGui.TextColored(new Vector4(0.8f, 0.8f, 0.8f, 1), "Height:");
+    ImGui.SameLine(90);
+    ImGui.InputFloat("##positionheight", ref height, 8, 16, "%.2f");
+
+    return new Rectangle(x, y, width, height);
   }
 }
