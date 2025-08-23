@@ -84,6 +84,38 @@ public class GameplayScene : Scene
       FrameHeight = 16
     };
     SceneManager.AddScene(new SpriteSheetEditorScene(sheet));
+
+    // Create an example AnimationController for the Animation Editor
+    AnimationController animController = new();
+
+    // Create some example animations
+    Animation walkDownAnim = new()
+    {
+      Speed = 200,
+      Frames = [4, 8, 12, 8],
+      SpriteSheet = new Engine.Resources.ResourceReference<SpriteSheet> { Path = "Sprites/Actor/NinjaGreen/SpriteSheet" }
+    };
+
+    Animation idleDownAnim = new()
+    {
+      Speed = 180,
+      Frames = [0],
+      SpriteSheet = new Engine.Resources.ResourceReference<SpriteSheet> { Path = "Sprites/Actor/NinjaGreen/SpriteSheet" }
+    };
+
+    Animation walkUpAnim = new()
+    {
+      Speed = 200,
+      Frames = [5, 9, 13, 9],
+      SpriteSheet = new Engine.Resources.ResourceReference<SpriteSheet> { Path = "Sprites/Actor/NinjaGreen/SpriteSheet" }
+    };
+
+    animController.Animations["WalkDown"] = walkDownAnim;
+    animController.Animations["IdleDown"] = idleDownAnim;
+    animController.Animations["WalkUp"] = walkUpAnim;
+    animController.Start = "IdleDown";
+
+    SceneManager.AddScene(new AnimationEditorScene(animController));
   }
 
 
@@ -95,6 +127,10 @@ public class GameplayScene : Scene
       SceneManager.PushScene<InventoryScene>();
     }
 
+    // Editor shortcuts:
+    // F2 - Sprite Editor
+    // F3 - SpriteSheet Editor
+    // F4 - Animation Editor
     if (IsKeyPressed(KeyboardKey.F2))
     {
       SceneManager.PushScene<SpriteEditorScene>();
@@ -102,6 +138,10 @@ public class GameplayScene : Scene
     if (IsKeyPressed(KeyboardKey.F3))
     {
       SceneManager.PushScene<SpriteSheetEditorScene>();
+    }
+    if (IsKeyPressed(KeyboardKey.F4))
+    {
+      SceneManager.PushScene<AnimationEditorScene>();
     }
   }
 
