@@ -9,7 +9,7 @@ public static class Viewport
   public static int Width { get; internal set; } = 1280;
   public static int Height { get; internal set; } = 720;
   public static float AspectRatio => (float)Width / Height;
-  public static float Zoom { get; internal set; } = 3.0f;
+  public static float Zoom { get; set; } = 3.0f;
 
   public static Camera2D Camera { get; private set; } = new Camera2D
   {
@@ -23,6 +23,18 @@ public static class Viewport
     Y = y;
     Width = width;
     Height = height;
+  }
+
+
+
+  public static void SetZoom(float zoom)
+  {
+    Zoom = zoom;
+    Camera = new Camera2D
+    {
+      Rotation = 0.0f,
+      Zoom = Zoom
+    };
   }
 
 

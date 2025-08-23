@@ -68,6 +68,13 @@ public class GameplayScene : Scene
     AddChild(signPost);
 
     SceneManager.AddScene(new InventoryScene(player2));
+
+    Sprite sprite = new()
+    {
+      TextureName = "Sprites/TinyDungeon",
+      Source = new(16, 112, 16, 16)
+    };
+    SceneManager.AddScene(new SpriteEditorScene(sprite));
   }
 
 
@@ -77,6 +84,11 @@ public class GameplayScene : Scene
     if (InputManager.JustPressed("Inventory"))
     {
       SceneManager.PushScene<InventoryScene>();
+    }
+
+    if (IsKeyPressed(KeyboardKey.F2))
+    {
+      SceneManager.SwitchTo<SpriteEditorScene>();
     }
   }
 

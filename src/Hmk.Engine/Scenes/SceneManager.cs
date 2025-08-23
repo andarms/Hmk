@@ -53,17 +53,11 @@ public static class SceneManager
     scenes[typeof(T)] = scene;
   }
 
-  public static void SwitchTo<T>() where T : Scene, new()
+  public static void SwitchTo<T>() where T : Scene
   {
     if (scenes.TryGetValue(typeof(T), out var scene))
     {
       SwitchToScene(scene);
-    }
-    else
-    {
-      var newScene = new T();
-      scenes[typeof(T)] = newScene;
-      SwitchToScene(newScene);
     }
   }
 
