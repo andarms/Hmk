@@ -256,4 +256,10 @@ public abstract class Resource : ISerializable
     }
     return null;
   }
+
+  public T Preload<T>(string filePath) where T : GameObject, new()
+  {
+    var newObject = GameObjectSerializerExtensions.LoadFromXml(filePath);
+    return newObject as T ?? throw new InvalidOperationException($"Resource at '{filePath}' is not a {typeof(T).Name}.");
+  }
 }

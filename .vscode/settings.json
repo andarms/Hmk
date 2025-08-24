@@ -1,5 +1,6 @@
 {
   "files.associations": {
-    "*.xres": "xml"
+    "*.xres": "xml",
+    "*.xobj": "xml"
   }
 }
