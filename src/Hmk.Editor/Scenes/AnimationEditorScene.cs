@@ -212,9 +212,6 @@ public class AnimationEditorScene : Scene
     // Draw the frame
     DrawTexturePro(texture.Value, sourceRect, destRect, Vector2.Zero, 0, Color.White);
 
-    // Draw label
-    DrawText("Animation Preview", (int)animationPreviewPos.X, (int)animationPreviewPos.Y - 25, 16, Color.White);
-
     // Draw frame info
     string frameInfo = $"Frame {frameToShow + 1}/{selectedAnimation.Frames.Count} (#{frameNumber})";
     DrawText(frameInfo, (int)animationPreviewPos.X, (int)(animationPreviewPos.Y + destRect.Height + 5), 12, Color.LightGray);
@@ -276,7 +273,6 @@ public class AnimationEditorScene : Scene
       showAddAnimationPopup = true;
       ImGui.OpenPopup("AddAnimationPopup");
     }
-
     ImGui.Spacing();
 
     if (animationController?.Animations != null)
@@ -284,7 +280,8 @@ public class AnimationEditorScene : Scene
       foreach (var kvp in animationController.Animations)
       {
         bool isSelected = selectedAnimationKey == kvp.Key;
-        if (ImGui.Selectable(kvp.Key, isSelected))
+
+        if (ImGui.Selectable(kvp.Key, isSelected, 0, new Vector2(260, 0)))
         {
           selectedAnimationKey = kvp.Key;
           selectedAnimation = kvp.Value;
@@ -296,8 +293,8 @@ public class AnimationEditorScene : Scene
 
         if (isSelected)
         {
-          ImGui.SameLine(250);
-          if (ImGui.Button($"{FontAwesome6.Trash}##{kvp.Key}", new(20)))
+          ImGui.SameLine(260, 2);
+          if (ImGui.Button($"{FontAwesome6.Trash}##{kvp.Key}"))
           {
             animationController.Animations.Remove(kvp.Key);
             if (selectedAnimationKey == kvp.Key)

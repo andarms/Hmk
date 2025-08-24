@@ -85,37 +85,11 @@ public class GameplayScene : Scene
     };
     SceneManager.AddScene(new SpriteSheetEditorScene(sheet));
 
-    // Create an example AnimationController for the Animation Editor
-    AnimationController animController = new();
-
-    // Create some example animations
-    Animation walkDownAnim = new()
+    AnimationController? controller = player2.GetChild<AnimationController>();
+    if (controller != null)
     {
-      Speed = 200,
-      Frames = [4, 8, 12, 8],
-      SpriteSheet = new Engine.Resources.ResourceReference<SpriteSheet> { Path = "Sprites/Actor/NinjaGreen/SpriteSheet" }
-    };
-
-    Animation idleDownAnim = new()
-    {
-      Speed = 180,
-      Frames = [0],
-      SpriteSheet = new Engine.Resources.ResourceReference<SpriteSheet> { Path = "Sprites/Actor/NinjaGreen/SpriteSheet" }
-    };
-
-    Animation walkUpAnim = new()
-    {
-      Speed = 200,
-      Frames = [5, 9, 13, 9],
-      SpriteSheet = new Engine.Resources.ResourceReference<SpriteSheet> { Path = "Sprites/Actor/NinjaGreen/SpriteSheet" }
-    };
-
-    animController.Animations["WalkDown"] = walkDownAnim;
-    animController.Animations["IdleDown"] = idleDownAnim;
-    animController.Animations["WalkUp"] = walkUpAnim;
-    animController.Start = "IdleDown";
-
-    SceneManager.AddScene(new AnimationEditorScene(animController));
+      SceneManager.AddScene(new AnimationEditorScene(controller));
+    }
   }
 
 
