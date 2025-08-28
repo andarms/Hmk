@@ -13,11 +13,7 @@ public class GameObject
 
   public GameObject? Parent { get; set; } = null;
   public List<GameObject> Children { get; } = [];
-  public Vector2 GlobalPosition
-  {
-    get => this.GetGlobalPosition();
-    set => this.SetGlobalPosition(value);
-  }
+  public Vector2 GlobalPosition => Parent?.GlobalPosition + Position ?? Position;
 
   internal Dictionary<Type, Trait> Traits { get; } = [];
 
