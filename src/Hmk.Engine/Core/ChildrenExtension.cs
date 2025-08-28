@@ -16,12 +16,6 @@ public static class GameObjectChildrenExtension
     child.Parent = null;
   }
 
-
-  public static IEnumerable<T> GetChildren<T>(this GameObject gameObject) where T : GameObject
-  {
-    return gameObject.Children.OfType<T>();
-  }
-
   public static T? GetChild<T>(this GameObject gameObject) where T : GameObject
   {
     return gameObject.Children.OfType<T>().FirstOrDefault();

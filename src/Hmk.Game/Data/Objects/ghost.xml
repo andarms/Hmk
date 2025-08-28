@@ -10,7 +10,7 @@
       <ResourceReference Property="Sprite" Path="Sprites/Actor/Ghost" />
     </GameObject>
   </Children>
-  <Traits>
-    <Trait Type="IsSolid" />
-  </Traits>
+  <Components>
+    <Component Type="IsSolid" />
+  </Components>
 </GameObject>

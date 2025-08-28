@@ -11,15 +11,15 @@
       <Size X="0" Y="0" />
     </GameObject>
   </Children>
-  <Traits>
-    <Trait Type="IsSolid" />
-    <Trait Type="HasInteraction">
+  <Components>
+    <Component Type="IsSolid" />
+    <Component Type="InteractionManager">
       <Interactions>
-        <Resource Type="Hmk.Engine.Systems.Interaction.WriteLine">
+        <Component Type="Hmk.Engine.Systems.Interaction.WriteLine">
           <Message>Hello, World!</Message>
-        </Resource>
+        </Component>
       </Interactions>
       <InteractionSide>Down</InteractionSide>
-    </Trait>
-  </Traits>
+    </Component>
+  </Components>
 </GameObject>

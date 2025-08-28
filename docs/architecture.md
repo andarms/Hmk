@@ -15,10 +15,10 @@ class GameObject {
     +Terminate()
 
     +Children: List<GameObject>
-    +Traits: List<Trait>
+    +Components: Dictionary<Type, Component>
     +AddChild(obj: GameObject) void
-    +AddTrait(t: Trait) void
-    +Trait<T>() Trait
+    +AddComponent(c: Component) void
+    +GetComponent<T>() Component
 }
 
 class Collider{
@@ -26,18 +26,18 @@ class Collider{
     +Size: Vector2
 }
 
-class Trait {
+class Component {
     <<abstract>>
 }
 
 GameObject  o-- GameObject : children
 GameObject  "1" o-- "1" Collider
-GameObject "1" *-- "*" Trait : traits
+GameObject "1" *-- "*" Component : components
 
 
-Trait <|-- IsSomething
-Trait <|-- HasSomething
-Trait <|-- CanDoSomething
+Component <|-- IsSomething
+Component <|-- HasSomething
+Component <|-- CanDoSomething
 ```
 
 ## Attack System
@@ -167,31 +167,23 @@ class Item {
     +use() void
 }
 
-
 class Inventory {
     +Items: List<Item>
+    +OnItemAdded: Signal<Item>
+    +OnItemRemoved: Signal<Item>
+    +AddItem(item: Item): void
+    +RemoveItem(item: Item): void
 }
 
-class HasInventory {
-    +Inventory: Inventory
+class CollectableItem {
+    +Item: Item
+    +AutoCollectionAllowed: bool
 }
-
-class CollectableItem
-
-class CanBeCollected{
-+Item: Item
-}
-
-
 
 IUsable <|.. UseConcreteItem
 Item ..> IUsable : delegates
-HasInventory o-- "1" Inventory
 Inventory *-- "n" Item
-
-CanBeCollected *-- "1" Item
-CanBeCollected *-- "1" CollectableItem
-Trait ()-- HasInventory
-Trait ()-- CanBeCollected
-GameObject ()-- CollectableItem
+CollectableItem *-- "1" Item
+Component <|-- Inventory
+GameObject <|-- CollectableItem
 ```

@@ -1,10 +1,9 @@
 using Hmk.Engine.Core;
-using Hmk.Engine.Resources;
 using Hmk.Engine.Serializer;
 
 namespace Hmk.Engine.Systems.Inventory;
 
-public class Inventory : Resource
+public class Inventory : Component
 {
   [Save]
   public List<Item> Items { get; set; } = [];

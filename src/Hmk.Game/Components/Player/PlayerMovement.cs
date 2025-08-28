@@ -4,6 +4,7 @@ using Hmk.Engine.Core;
 using Hmk.Engine.Graphics;
 using Hmk.Engine.Input;
 using Hmk.Engine.Serializer;
+using Hmk.Engine.Systems.Interaction;
 
 namespace Hmk.Game.Components.Player;
 
@@ -12,6 +13,7 @@ public class PlayerMovement : GameObject
   public new DynamicObject? Parent => base.Parent as DynamicObject;
 
   AnimationController? controller = null;
+  InteractionTrigger? interactionTrigger = null;
 
   [Save]
   public float Speed { get; set; } = 100f;
@@ -22,6 +24,7 @@ public class PlayerMovement : GameObject
     ArgumentNullException.ThrowIfNull(Parent, nameof(Parent));
 
     controller = Parent.GetChild<AnimationController>();
+    interactionTrigger = Parent.GetComponent<InteractionTrigger>();
   }
 
   public override void Update(float dt)
@@ -30,8 +33,6 @@ public class PlayerMovement : GameObject
     if (Parent == null) return;
 
     var direction = InputManager.GetVector("move_left", "move_right", "move_up", "move_down");
-
-
 
     var stickInput = InputManager.GetGamepadLeftStick();
     if (stickInput.Length() > 0.1f)
@@ -92,5 +93,8 @@ public class PlayerMovement : GameObject
     var velocity = direction * currentSpeed * dt;
 
     Parent.Move(velocity);
+
+    // Handle interaction input
+    interactionTrigger?.HandleInteractionInput(Parent);
   }
 }

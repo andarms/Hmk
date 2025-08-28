@@ -1,21 +1,22 @@
 using System.Globalization;
 using System.Numerics;
 using System.Xml.Linq;
+using Hmk.Engine.Collision;
 using Hmk.Engine.Serializer;
 using Hmk.Engine.Resources;
 
 namespace Hmk.Engine.Core;
 
-public abstract class Trait : ISerializable
+public abstract class Component : ISerializable
 {
   public string Type => GetType().Name;
 
   public virtual XElement Serialize()
   {
-    XElement element = new("Trait");
+    XElement element = new("Component");
     element.SetAttributeValue("Type", Type);
 
-    // Serialize [Save] properties on this Trait
+    // Serialize [Save] properties on this Component
     var props = GetType().GetProperties()
       .Where(p => Attribute.IsDefined(p, typeof(SaveAttribute)));
 
@@ -33,7 +34,7 @@ public abstract class Trait : ISerializable
   {
     ArgumentNullException.ThrowIfNull(element);
 
-    // Deserialize [Save] properties on this Trait
+    // Deserialize [Save] properties on this Component
     var props = GetType().GetProperties()
       .Where(p => Attribute.IsDefined(p, typeof(SaveAttribute)));
 
@@ -127,6 +128,12 @@ public abstract class Trait : ISerializable
           res?.Deserialize(element);
           return res;
         }
+        if (typeof(Component).IsAssignableFrom(resolved))
+        {
+          var comp = Activator.CreateInstance(resolved) as Component;
+          comp?.Deserialize(element);
+          return comp;
+        }
         if (typeof(GameObject).IsAssignableFrom(resolved))
         {
           var go = Activator.CreateInstance(resolved) as GameObject;
@@ -187,6 +194,8 @@ public abstract class Trait : ISerializable
       return element.ToRectangle();
     if (targetType == typeof(Color))
       return element.ToColor();
+    if (targetType == typeof(Collider))
+      return element.ToCollider();
 
     if (typeof(Resource).IsAssignableFrom(targetType))
     {
@@ -195,6 +204,14 @@ public abstract class Trait : ISerializable
       var res = Activator.CreateInstance(t) as Resource;
       res?.Deserialize(element);
       return res;
+    }
+    if (typeof(Component).IsAssignableFrom(targetType))
+    {
+      var typeAttr = element.Attribute("Type")?.Value;
+      var t = ResolveType(typeAttr, typeof(Component)) ?? targetType;
+      var comp = Activator.CreateInstance(t) as Component;
+      comp?.Deserialize(element);
+      return comp;
     }
     if (typeof(GameObject).IsAssignableFrom(targetType))
     {
@@ -232,6 +249,12 @@ public abstract class Trait : ISerializable
           res?.Deserialize(element);
           return res;
         }
+        if (typeof(Component).IsAssignableFrom(resolved))
+        {
+          var comp = Activator.CreateInstance(resolved) as Component;
+          comp?.Deserialize(element);
+          return comp;
+        }
         if (typeof(GameObject).IsAssignableFrom(resolved))
         {
           var go = Activator.CreateInstance(resolved) as GameObject;
@@ -268,6 +291,14 @@ public abstract class Trait : ISerializable
       var go = Activator.CreateInstance(t) as GameObject;
       go?.Deserialize(element);
       return go;
+    }
+    if (typeof(Component).IsAssignableFrom(itemType))
+    {
+      var typeAttr = element.Attribute("Type")?.Value;
+      var t = ResolveType(typeAttr ?? itemType.FullName!, typeof(Component)) ?? itemType;
+      var comp = Activator.CreateInstance(t) as Component;
+      comp?.Deserialize(element);
+      return comp;
     }
     if (typeof(Resources.Resource).IsAssignableFrom(itemType))
     {

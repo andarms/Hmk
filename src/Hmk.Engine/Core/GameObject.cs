@@ -15,7 +15,7 @@ public class GameObject
   public List<GameObject> Children { get; } = [];
   public Vector2 GlobalPosition => Parent?.GlobalPosition + Position ?? Position;
 
-  internal Dictionary<Type, Trait> Traits { get; } = [];
+  internal Dictionary<Type, Component> Components { get; } = [];
 
   public GameObject() { }
 
@@ -42,7 +42,7 @@ public class GameObject
   {
     Children.ForEach(child => child.Terminate());
     Children.Clear();
-    Traits.Clear();
+    Components.Clear();
     Parent = null;
     if (Collider != null)
     {

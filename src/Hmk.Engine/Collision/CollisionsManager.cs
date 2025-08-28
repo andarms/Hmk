@@ -89,8 +89,8 @@ public static class CollisionsManager
         bool wasColliding = objA.Collisions.Contains(objB);
         bool isColliding = objA.Collides(objB);
 
-        TriggerZone? zoneA = objA.Trait<HasTriggerZone>()?.Zone;
-        TriggerZone? zoneB = objB.Trait<HasTriggerZone>()?.Zone;
+        TriggerZone? zoneA = objA.GetComponent<TriggerZone>();
+        TriggerZone? zoneB = objB.GetComponent<TriggerZone>();
 
         if (isColliding && !wasColliding)
         {
@@ -115,23 +115,23 @@ public static class CollisionsManager
 
   private static void HandleCollectables(GameObject objA, GameObject objB)
   {
-    CanBeCollected? CanBeCollectedTraitA = objA.Trait<CanBeCollected>();
-    CanBeCollected? CanBeCollectedTraitB = objB.Trait<CanBeCollected>();
-    HasInventory? inventoryA = objA.Trait<HasInventory>();
-    HasInventory? inventoryB = objB.Trait<HasInventory>();
+    CollectableItem? collectableA = objA.GetComponent<CollectableItem>();
+    CollectableItem? collectableB = objB.GetComponent<CollectableItem>();
+    Inventory? inventoryA = objA.GetComponent<Inventory>();
+    Inventory? inventoryB = objB.GetComponent<Inventory>();
 
-    if (CanBeCollectedTraitA == null && CanBeCollectedTraitB == null) return;
+    if (collectableA == null && collectableB == null) return;
     if (inventoryA == null && inventoryB == null) return;
 
-    if (CanBeCollectedTraitA != null && CanBeCollectedTraitA.AutoCollectionAllowed && CanBeCollectedTraitA.Item != null)
+    if (collectableA != null && collectableA.AutoCollectionAllowed && collectableA.Item != null)
     {
-      inventoryB?.Inventory.AddItem(CanBeCollectedTraitA.Item);
+      inventoryB?.AddItem(collectableA.Item);
       RemoveObject(objA);
       objA.Terminate();
     }
-    else if (CanBeCollectedTraitB != null && CanBeCollectedTraitB.AutoCollectionAllowed && CanBeCollectedTraitB.Item != null)
+    else if (collectableB != null && collectableB.AutoCollectionAllowed && collectableB.Item != null)
     {
-      inventoryA?.Inventory.AddItem(CanBeCollectedTraitB.Item);
+      inventoryA?.AddItem(collectableB.Item);
       RemoveObject(objB);
       objB.Terminate();
     }
@@ -154,7 +154,7 @@ public static class CollisionsManager
   public static void ResolveSolidCollision(GameObject obj, GameObject other, bool resolveX, bool resolveY)
   {
     if (obj.Collider == null || other.Collider == null) return;
-    if (other.HasTrait<IsSolid>())
+    if (other.HasComponent<IsSolid>())
     {
       StopObject(obj, other, resolveX, resolveY);
     }
@@ -197,7 +197,7 @@ public static class CollisionsManager
   {
     foreach (var nearby in GetPotentialCollisions(obj))
     {
-      var interaction = nearby.Trait<HasInteraction>();
+      var interaction = nearby.GetComponent<InteractionManager>();
       if (interaction == null) continue;
 
       if (interaction.InteractionSide != null && interaction.InteractionSide != facingDirection.Inverse()) { continue; }

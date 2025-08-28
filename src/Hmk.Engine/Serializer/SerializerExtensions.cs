@@ -63,13 +63,13 @@ public static class GameObjectSerializerExtensions
       }
     }
 
-    if (gameObject.Traits.Count > 0)
+    if (gameObject.Components.Count > 0)
     {
-      XElement traitsElement = new("Traits");
-      element.Add(traitsElement);
-      foreach (var trait in gameObject.Traits.Values)
+      XElement componentsElement = new("Components");
+      element.Add(componentsElement);
+      foreach (var component in gameObject.Components.Values)
       {
-        traitsElement.Add(trait.Serialize());
+        componentsElement.Add(component.Serialize());
       }
     }
 
@@ -118,7 +118,27 @@ public static class GameObjectSerializerExtensions
       }
     }
 
-    // Traits
+    // Components (new system)
+    var componentsElement = element.Element("Components");
+    if (componentsElement != null)
+    {
+      foreach (var componentEl in componentsElement.Elements())
+      {
+        var typeName = componentEl.Attribute("Type")?.Value;
+        if (string.IsNullOrWhiteSpace(typeName)) continue;
+
+        var componentType = ResolveType(typeName, typeof(Component));
+        if (componentType == null) continue;
+
+        if (Activator.CreateInstance(componentType) is Component component)
+        {
+          component.Deserialize(componentEl);
+          gameObject.AddComponent(component);
+        }
+      }
+    }
+
+    // Legacy Traits support (for backward compatibility)
     var traitsElement = element.Element("Traits");
     if (traitsElement != null)
     {
@@ -127,13 +147,12 @@ public static class GameObjectSerializerExtensions
         var typeName = traitEl.Attribute("Type")?.Value;
         if (string.IsNullOrWhiteSpace(typeName)) continue;
 
-        var traitType = ResolveType(typeName, typeof(Trait));
-        if (traitType == null) continue;
-
-        if (Activator.CreateInstance(traitType) is Trait trait)
+        // Try to resolve as Component first, then fall back to legacy Trait
+        var componentType = ResolveType(typeName, typeof(Component));
+        if (componentType != null && Activator.CreateInstance(componentType) is Component component)
         {
-          trait.Deserialize(traitEl);
-          gameObject.AddTrait(trait);
+          component.Deserialize(traitEl);
+          gameObject.AddComponent(component);
         }
       }
     }
@@ -238,6 +257,16 @@ public static class GameObjectSerializerExtensions
     var t = ResolveType(typeAttr, typeof(Resource));
     if (t == null) return null;
     return Activator.CreateInstance(t) as Resource;
+  }
+
+  private static Component? CreateComponentFromElement(XElement element)
+  {
+    var typeAttr = element.Attribute("Type")?.Value;
+    if (string.IsNullOrWhiteSpace(typeAttr)) return null;
+
+    var t = ResolveType(typeAttr, typeof(Component));
+    if (t == null) return null;
+    return Activator.CreateInstance(t) as Component;
   }
 
   private static void DeserializeSavedProperties(GameObject gameObject, XElement parent)
@@ -397,6 +426,12 @@ public static class GameObjectSerializerExtensions
           res?.Deserialize(element);
           return res;
         }
+        if (typeof(Component).IsAssignableFrom(resolved))
+        {
+          var comp = Activator.CreateInstance(resolved) as Component;
+          comp?.Deserialize(element);
+          return comp;
+        }
         if (typeof(GameObject).IsAssignableFrom(resolved))
         {
           var go = Activator.CreateInstance(resolved) as GameObject;
@@ -470,6 +505,16 @@ public static class GameObjectSerializerExtensions
       }
       return child;
     }
+    if (typeof(Component).IsAssignableFrom(targetType))
+    {
+      // Expecting <Component Type="..." Property="...">...
+      var comp = CreateComponentFromElement(element) ?? Activator.CreateInstance(targetType) as Component;
+      if (comp != null)
+      {
+        comp.Deserialize(element);
+      }
+      return comp;
+    }
     if (typeof(Resource).IsAssignableFrom(targetType))
     {
       // Expecting <Resource Type="..." Property="...">...
@@ -506,6 +551,12 @@ public static class GameObjectSerializerExtensions
           res?.Deserialize(element);
           return res;
         }
+        if (typeof(Component).IsAssignableFrom(resolved))
+        {
+          var comp = Activator.CreateInstance(resolved) as Component;
+          comp?.Deserialize(element);
+          return comp;
+        }
         if (typeof(Core.GameObject).IsAssignableFrom(resolved))
         {
           var go = Activator.CreateInstance(resolved) as Core.GameObject;
@@ -534,6 +585,14 @@ public static class GameObjectSerializerExtensions
       var go = Activator.CreateInstance(t) as Core.GameObject;
       go?.Deserialize(element);
       return go;
+    }
+    if (typeof(Component).IsAssignableFrom(itemType))
+    {
+      var typeAttr = element.Attribute("Type")?.Value;
+      var t = ResolveType(typeAttr ?? itemType.FullName!, typeof(Component)) ?? itemType;
+      var comp = Activator.CreateInstance(t) as Component;
+      comp?.Deserialize(element);
+      return comp;
     }
     if (typeof(Resources.Resource).IsAssignableFrom(itemType))
     {

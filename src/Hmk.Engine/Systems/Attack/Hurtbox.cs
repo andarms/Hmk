@@ -24,9 +24,9 @@ public class Hurtbox : GameObject
     ArgumentNullException.ThrowIfNull(Collider, nameof(Collider));
 
     Zone.OnEnter.Connect(HandleCollision);
-    if (!this.HasTrait<HasTriggerZone>())
+    if (!this.HasComponent<TriggerZone>())
     {
-      this.AddTrait(new HasTriggerZone { Zone = Zone });
+      this.AddComponent(Zone);
     }
 
   }

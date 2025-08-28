@@ -1,9 +1,8 @@
 using Hmk.Engine.Core;
-using Hmk.Engine.Resources;
 
 namespace Hmk.Engine.Systems.Interaction;
 
-public abstract class Interaction : Resource
+public abstract class Interaction : Component
 {
   protected const bool ShouldAlwaysExecute = true;
   public abstract bool CanPerformInteraction(GameObject actor);

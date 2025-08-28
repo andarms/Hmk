@@ -25,14 +25,7 @@
         <Max>100</Max>
         <Current>100</Current>
       </Resource>
-      <Resource Type="Hmk.Engine.Collision.TriggerZone" Property="Zone" />
-    </GameObject>
-    <GameObject Type="Hmk.Engine.Systems.Interaction.InteractionTrigger">
-      <Position X="0" Y="0" />
-      <Collider>
-        <Size X="8" Y="8" />
-        <Offset X="0" Y="0" />
-      </Collider>
+      <Component Type="TriggerZone" Property="Zone" />
     </GameObject>
     <GameObject Type="Hmk.Engine.Graphics.AnimationController">
       <Position X="0" Y="0" />
@@ -133,12 +126,16 @@
       </Animations>
     </GameObject>
   </Children>
-  <Traits>
-    <Trait Type="IsSolid" />
-    <Trait Type="HasInventory">
-      <Resource Type="Hmk.Engine.Systems.Inventory.Inventory" Property="Inventory">
-        <Items />
-      </Resource>
-    </Trait>
-  </Traits>
+  <Components>
+    <Component Type="IsSolid" />
+    <Component Type="Inventory">
+      <Items />
+    </Component>
+    <Component Type="InteractionTrigger">
+      <Collider>
+        <Size X="8" Y="8" />
+        <Offset X="0" Y="0" />
+      </Collider>
+    </Component>
+  </Components>
 </GameObject>

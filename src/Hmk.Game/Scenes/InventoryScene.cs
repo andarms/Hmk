@@ -18,17 +18,17 @@ public class InventoryScene : Scene
     inventoryWindow.Position = new(x, y);
     AddChild(inventoryWindow, UILayer);
 
-    HasInventory? i = player.Trait<HasInventory>();
+    Inventory? i = player.GetComponent<Inventory>();
     Console.WriteLine("Inventory initialized");
-    i?.Inventory?.OnItemAdded.Connect((_) =>
+    i?.OnItemAdded.Connect((_) =>
     {
       Console.WriteLine("Item added to inventory");
-      inventoryWindow.UpdateInventory(i.Inventory);
+      inventoryWindow.UpdateInventory(i);
     });
-    i?.Inventory.OnItemRemoved.Connect((_) =>
+    i?.OnItemRemoved.Connect((_) =>
     {
       Console.WriteLine("Item removed from inventory");
-      inventoryWindow.UpdateInventory(i.Inventory);
+      inventoryWindow.UpdateInventory(i);
     });
   }
 

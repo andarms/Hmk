@@ -103,6 +103,12 @@ public abstract class Resource : ISerializable
           res?.Deserialize(element);
           return res;
         }
+        if (typeof(Component).IsAssignableFrom(resolved))
+        {
+          var comp = Activator.CreateInstance(resolved) as Component;
+          comp?.Deserialize(element);
+          return comp;
+        }
         if (typeof(GameObject).IsAssignableFrom(resolved))
         {
           var go = Activator.CreateInstance(resolved) as GameObject;
@@ -172,6 +178,14 @@ public abstract class Resource : ISerializable
       res?.Deserialize(element);
       return res;
     }
+    if (typeof(Component).IsAssignableFrom(targetType))
+    {
+      var typeAttr = element.Attribute("Type")?.Value;
+      var t = ResolveType(typeAttr, typeof(Component)) ?? targetType;
+      var comp = Activator.CreateInstance(t) as Component;
+      comp?.Deserialize(element);
+      return comp;
+    }
     if (typeof(GameObject).IsAssignableFrom(targetType))
     {
       var typeAttr = element.Attribute("Type")?.Value;
@@ -206,6 +220,12 @@ public abstract class Resource : ISerializable
           res?.Deserialize(element);
           return res;
         }
+        if (typeof(Component).IsAssignableFrom(resolved))
+        {
+          var comp = Activator.CreateInstance(resolved) as Component;
+          comp?.Deserialize(element);
+          return comp;
+        }
         if (typeof(GameObject).IsAssignableFrom(resolved))
         {
           var go = Activator.CreateInstance(resolved) as GameObject;
@@ -230,6 +250,14 @@ public abstract class Resource : ISerializable
       var res = Activator.CreateInstance(t) as Resource;
       res?.Deserialize(element);
       return res;
+    }
+    if (typeof(Component).IsAssignableFrom(itemType))
+    {
+      var typeAttr = element.Attribute("Type")?.Value;
+      var t = ResolveType(typeAttr, typeof(Component)) ?? itemType;
+      var comp = Activator.CreateInstance(t) as Component;
+      comp?.Deserialize(element);
+      return comp;
     }
     if (typeof(GameObject).IsAssignableFrom(itemType))
     {

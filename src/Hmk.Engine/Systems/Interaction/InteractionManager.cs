@@ -3,7 +3,7 @@ using Hmk.Engine.Serializer;
 
 namespace Hmk.Engine.Systems.Interaction;
 
-public class HasInteraction : Trait
+public class InteractionManager : Component
 {
   [Save]
   public List<Interaction> Interactions { get; set; } = [];

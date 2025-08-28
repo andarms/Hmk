@@ -13,7 +13,7 @@ namespace Hmk.Game.Scenes;
 public class GameplayScene : Scene
 {
   readonly GameObjectTemplate<DynamicObject> playerTemplate = new("player");
-  readonly GameObjectTemplate<CollectableItem> swordTemplate = new("Collectables/sword");
+  readonly GameObjectTemplate<GameObject> swordTemplate = new("Collectables/sword");
 
   public override void Initialize()
   {
