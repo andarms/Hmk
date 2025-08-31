@@ -7,7 +7,7 @@ public class Game
     InitWindow(Settings.WindowWidth, Settings.WindowHeight, Settings.WindowTitle);
     SetTargetFPS(Settings.TargetFPS);
 
-    // ResourcesManager.Initialize();
+    ResourcesManager.Initialize();
     // CollisionsManager.Initialize();
     // SceneManager.Initialize();
     // var maps = InputMap.CreateDefault();
@@ -23,7 +23,7 @@ public class Game
       Draw();
     }
 
-    // ResourcesManager.Terminate();
+    ResourcesManager.Terminate();
     CloseWindow();
   }
 

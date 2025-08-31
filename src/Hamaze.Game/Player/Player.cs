@@ -1,9 +1,9 @@
 using System.Numerics;
 using Hamaze.Engine.Core;
 using Hamaze.Engine.Core.Components;
-using Hamaze.Engine.Player.Systems;
+using Hamaze.Game.Player.Systems;
 
-namespace Hamaze.Engine.Player;
+namespace Hamaze.Game.Player;
 
 public class Player
 {

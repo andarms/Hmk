@@ -11,4 +11,11 @@
     <ProjectReference Include="..\Hamaze.Engine\Hamaze.Engine.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="Assets/**/*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+
 </Project>
