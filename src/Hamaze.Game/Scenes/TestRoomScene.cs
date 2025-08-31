@@ -9,6 +9,8 @@ public class TestRoomScene : Scene
   {
     Entity player = Player.Player.Create(new(100, 100));
     world.AddChild(player);
+    world.AddSystem(new MapDrawSystems());
+    world.AddSystem(new GridDebugSystem());
     world.AddSystem(new CameraSystem());
   }
 
@@ -21,31 +23,34 @@ public class TestRoomScene : Scene
   }
 }
 
-public class CameraSystem : WorldSystem
+
+class Terrain
 {
-  Vector2 position = new(0, 0);
-  Vector2 camera = new(0, 0);
+  public Rectangle Filled { get; } = new(0, 0, 16, 16);
+  public Rectangle Empty { get; } = new(16, 0, 16, 16);
+  public Rectangle Corner { get; } = new(32, 0, 16, 16);
+}
 
-  public override void Update(float DeltaTime, IEnumerable<IEntity> Entities)
-  {
-    Vector2 targetCamera = camera;
 
-    if (IsKeyDown(KeyboardKey.Right)) targetCamera.X += 100 * DeltaTime;
-    if (IsKeyDown(KeyboardKey.Left)) targetCamera.X -= 100 * DeltaTime;
-    if (IsKeyDown(KeyboardKey.Up)) targetCamera.Y -= 100 * DeltaTime;
-    if (IsKeyDown(KeyboardKey.Down)) targetCamera.Y += 100 * DeltaTime;
-
-    // Smoothly interpolate camera towards targetCamera
-    // float smoothness = 10f; // Higher is smoother
-    // camera = Vector2.Lerp(camera, targetCamera, DeltaTime * smoothness);
-    camera = targetCamera;
-
-    Viewport.SetTarget(camera);
-  }
-
+public class MapDrawSystems : WorldSystem
+{
+  readonly Terrain terrain = new();
+  Vector2 size = new(48, 16);
   public override void Draw(IEnumerable<IEntity> _)
   {
-    DrawTextureV(ResourcesManager.Textures["test"], position, Color.White);
-    DrawCircleV(camera, 5, Color.Red);
+    // Draw the map using the terrain rectangles
+    for (int x = 0; x < size.X; x++)
+    {
+      for (int y = 0; y < size.Y; y++)
+      {
+        Vector2 position = new(x * 16, y * 16);
+        if (x > 10 && x < 22 && y > 4 && y < 9)
+        {
+          DrawTextureRec(ResourcesManager.Textures["Tilesets/terrain_001"], terrain.Filled, position, Color.White);
+          continue;
+        }
+        DrawTextureRec(ResourcesManager.Textures["Tilesets/terrain_001"], terrain.Empty, position, Color.White);
+      }
+    }
   }
 }
