@@ -11,11 +11,13 @@ public class World
   public void AddChild(Entity child)
   {
     entities.Add(child);
+    child.Initialize();
   }
 
   public void AddSystem(WorldSystem system)
   {
     systems.Add(system);
+    system.Initialize();
   }
 
 

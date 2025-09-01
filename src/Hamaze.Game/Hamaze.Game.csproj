@@ -17,5 +17,9 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="DotTiled" Version="0.3.0" />
+  </ItemGroup>
+
 
 </Project>
