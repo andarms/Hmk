@@ -14,6 +14,9 @@ public static class Viewport
   public static float AspectRatio => (float)Width / Height;
   public static float Zoom { get; set; } = 3.0f;
 
+
+  public static Vector2 ScreenSize => new(Width, Height);
+
   public static Camera2D Camera { get; private set; } = new Camera2D
   {
     Rotation = 0.0f,

@@ -10,7 +10,7 @@ public abstract class WorldSystem
 
 public abstract class EntitySystem
 {
-  public virtual void Initialize() { }
+  public virtual void Initialize(IEntity entity) { }
   public virtual void Update(float DeltaTime, IEntity entity) { }
   public virtual void Draw(IReadOnlyEntity entity) { }
   public virtual void Terminate() { }

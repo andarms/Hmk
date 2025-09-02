@@ -12,14 +12,22 @@ public sealed class Entity : IEntity, IReadOnlyEntity
   readonly Dictionary<string, Component> components = [];
   public IReadOnlyList<Entity> Children => children.AsReadOnly();
 
+  public Collider Collider { get; private set; } = new EmptyCollider();
+
   public void AddComponent<T>(T component) where T : Component
   {
     components.Add(typeof(T).Name, component);
   }
 
+  public bool HasComponent<T>() where T : Component
+  {
+    return components.ContainsKey(typeof(T).Name);
+  }
+
   public T? GetComponent<T>() where T : Component
   {
-    return components[typeof(T).Name] as T;
+    components.TryGetValue(typeof(T).Name, out var component);
+    return component as T;
   }
 
   public T Require<T>() where T : Component
@@ -38,6 +46,11 @@ public sealed class Entity : IEntity, IReadOnlyEntity
     systems.Add(system);
   }
 
+  public void SetCollider(Collider collider)
+  {
+    Collider = collider;
+  }
+
   public void Initialize()
   {
     foreach (var component in components.Values)
@@ -46,7 +59,7 @@ public sealed class Entity : IEntity, IReadOnlyEntity
     }
     foreach (var system in systems)
     {
-      system.Initialize();
+      system.Initialize(this);
     }
   }
 
@@ -86,4 +99,7 @@ public sealed class Entity : IEntity, IReadOnlyEntity
       system.Terminate();
     }
   }
+
+
+  public Rectangle Bounds => new(Collider.Offset + GlobalPosition, Collider.Size);
 }
