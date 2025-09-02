@@ -6,12 +6,6 @@ namespace Hamaze.Game.Pong.Systems;
 
 public class PaddleInputSystem(float speed) : EntitySystem
 {
-  Vector2 paddleSize;
-  public override void Initialize(IEntity entity)
-  {
-    base.Initialize(entity);
-    paddleSize = entity.Require<PaddleSprite>().Size;
-  }
 
   public override void Update(float dt, IEntity entity)
   {
@@ -26,6 +20,6 @@ public class PaddleInputSystem(float speed) : EntitySystem
     {
       entity.Position = new(entity.Position.X, entity.Position.Y + speed * dt);
     }
-    entity.Position = Vector2.Clamp(entity.Position, new Vector2(0, 0), Viewport.ScreenSize - paddleSize);
+    entity.Position = Vector2.Clamp(entity.Position, new Vector2(0, 0), Viewport.ScreenSize - AIPaddle.Size);
   }
 }

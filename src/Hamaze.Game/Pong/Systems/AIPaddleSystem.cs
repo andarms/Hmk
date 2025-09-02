@@ -12,6 +12,6 @@ public class AIPaddleSystem : EntitySystem
     AIPaddle ai = entity.Require<AIPaddle>();
     Vector2 direction = Vector2.Normalize(ai.TargetPosition - entity.Position);
     entity.Position = new Vector2(entity.Position.X, entity.Position.Y + direction.Y * ai.Speed * dt);
-    entity.Position = Vector2.Clamp(entity.Position, new Vector2(0, 0), Viewport.ScreenSize - ai.Size);
+    entity.Position = Vector2.Clamp(entity.Position, new Vector2(0, 0), Viewport.ScreenSize - AIPaddle.Size);
   }
 }

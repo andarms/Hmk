@@ -8,7 +8,7 @@ namespace Hamaze.Game.Pong.Systems;
 public class BallMovementSystem() : EntitySystem
 {
   public float speed = 300f;
-  Vector2 offset = new(32, 0);
+  Vector2 offset = new(32 + AIPaddle.Size.X, 0);
   public override void Update(float dt, IEntity entity)
   {
     base.Update(dt, entity);

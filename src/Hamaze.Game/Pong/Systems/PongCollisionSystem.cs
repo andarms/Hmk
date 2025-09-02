@@ -1,9 +1,10 @@
+using System.Numerics;
 using Hamaze.Engine.Core;
 using Hamaze.Game.Pong.Components;
 
 namespace Hamaze.Game.Pong.Systems;
 
-public class PaddleCollisionSystem : WorldSystem
+public class PongCollisionSystem : WorldSystem
 {
   public override void Update(float dt, IEnumerable<IEntity> entities)
   {
@@ -21,10 +22,11 @@ public class PaddleCollisionSystem : WorldSystem
         if (CheckCollisionRecs(obj1.Bounds, obj2.Bounds))
         {
           var ball = obj1.GetComponent<Ball>() ?? obj2.GetComponent<Ball>();
-          if (ball != null)
+          if (ball != null && !ball.Immune)
           {
             ball.Velocity *= -1;
             ball.SpeedIncrease += 0.1f;
+            ball.SetImmunity(1f);
           }
         }
       }

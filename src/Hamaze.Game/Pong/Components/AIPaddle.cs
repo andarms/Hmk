@@ -7,5 +7,5 @@ public class AIPaddle : Component
 {
   public Vector2 TargetPosition;
   public float Speed = 400f;
-  public Vector2 Size = new(32, 128);
+  public static Vector2 Size => new(32, 128);
 }

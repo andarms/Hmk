@@ -8,9 +8,32 @@ public class Ball : Component
   public Vector2 Velocity = Vector2.Zero;
   public float SpeedIncrease = 1f;
 
+  public bool Immune { get; private set; } = false;
+
+  float immunityTimer = 0f;
+
   public override void Initialize(IReadOnlyEntity entity)
   {
     base.Initialize(entity);
     Velocity = Vector2.Normalize(new(GetRandomValue(-10, 10), GetRandomValue(-10, 10)));
+  }
+
+
+  public override void Update(float dt, IReadOnlyEntity entity)
+  {
+    if (Immune)
+    {
+      immunityTimer -= dt;
+      if (immunityTimer <= 0f)
+      {
+        Immune = false;
+      }
+    }
+  }
+
+  public void SetImmunity(float duration)
+  {
+    Immune = true;
+    immunityTimer = duration;
   }
 }
