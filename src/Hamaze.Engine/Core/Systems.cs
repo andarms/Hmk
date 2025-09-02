@@ -2,9 +2,9 @@ namespace Hamaze.Engine.Core;
 
 public abstract class WorldSystem
 {
-  public virtual void Initialize() { }
-  public virtual void Update(float DeltaTime, IEnumerable<IEntity> Entities) { }
-  public virtual void Draw(IEnumerable<IEntity> Entities) { }
+  public virtual void Initialize(IEnumerable<IEntity> entities) { }
+  public virtual void Update(float DeltaTime, IEnumerable<IEntity> entities) { }
+  public virtual void Draw(IEnumerable<IEntity> entities) { }
   public virtual void Terminate() { }
 }
 

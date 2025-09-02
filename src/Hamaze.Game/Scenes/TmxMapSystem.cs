@@ -10,9 +10,9 @@ public class TmxMapSystem(string mapPath = "Assets/Maps/map_001.tmx") : WorldSys
   private readonly Dictionary<uint, Texture2D> tilesetTextures = [];
   private readonly string mapPath = mapPath;
 
-  public override void Initialize()
+  public override void Initialize(IEnumerable<IEntity> entities)
   {
-    base.Initialize();
+    base.Initialize(entities);
     LoadTmxMap();
   }
 

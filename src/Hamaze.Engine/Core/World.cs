@@ -17,7 +17,7 @@ public class World
   public void AddSystem(WorldSystem system)
   {
     systems.Add(system);
-    system.Initialize();
+    system.Initialize(entities);
   }
 
 
@@ -29,7 +29,7 @@ public class World
     }
     foreach (var system in systems)
     {
-      system.Initialize();
+      system.Initialize(entities);
     }
   }
 

@@ -55,7 +55,7 @@ public sealed class Entity : IEntity, IReadOnlyEntity
   {
     foreach (var component in components.Values)
     {
-      component.Initialize();
+      component.Initialize(this);
     }
     foreach (var system in systems)
     {
