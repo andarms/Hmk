@@ -1,6 +1,8 @@
 using System.Numerics;
 using Hamaze.Engine.Core;
 using Hamaze.Engine.Core.Systems;
+using Hamaze.Game.Entities.Player;
+using Hamaze.Game.Systems;
 
 namespace Hamaze.Game.Scenes;
 
@@ -8,9 +10,8 @@ public class TestRoomScene : Scene
 {
   public override void Initialize()
   {
-    Entity player = Player.Player.Create(new(16, 16));
+    Entity player = Player.Create(new(16, 16));
     world.AddChild(player);
-
 
     world.AddSystem(new TmxMapSystem());
     world.AddSystem(new GridDebugSystem());

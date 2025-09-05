@@ -1,7 +1,7 @@
 using System.Numerics;
 using Hamaze.Engine.Core;
 
-namespace Hamaze.Game.Player.Systems;
+namespace Hamaze.Game.Entities.Player.Systems;
 
 public class PlayerControllerSystem : EntitySystem
 {

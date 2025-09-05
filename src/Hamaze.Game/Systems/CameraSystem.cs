@@ -1,8 +1,7 @@
 using System.Numerics;
 using Hamaze.Engine.Core;
-using Hamaze.Game.Player.Systems;
 
-namespace Hamaze.Game.Scenes;
+namespace Hamaze.Game.Systems;
 
 public class CameraSystem : WorldSystem
 {

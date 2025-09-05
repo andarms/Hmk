@@ -1,9 +1,9 @@
 using System.Numerics;
 using Hamaze.Engine.Core;
 using Hamaze.Engine.Core.Components;
-using Hamaze.Game.Player.Systems;
+using Hamaze.Game.Entities.Player.Systems;
 
-namespace Hamaze.Game.Player;
+namespace Hamaze.Game.Entities.Player;
 
 public class Player
 {
@@ -17,7 +17,7 @@ public class Player
     player.AddComponent(new DynamicBody());
     player.AddComponent(new Sprite
     {
-      TextureName = "Sprites/TinyDungeon",
+      TextureName = "Sprites/Actor/NinjaGreen/SpriteSheet",
       Source = new Rectangle(16, 160, 16, 16),
       Anchor = new Vector2(8, 16),
     });

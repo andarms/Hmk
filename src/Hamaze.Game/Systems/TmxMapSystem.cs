@@ -2,7 +2,7 @@ using System.Numerics;
 using Hamaze.Engine.Core;
 using DotTiled;
 
-namespace Hamaze.Game.Scenes;
+namespace Hamaze.Game.Systems;
 
 public class TmxMapSystem(string mapPath = "Assets/Maps/map_001.tmx") : WorldSystem
 {

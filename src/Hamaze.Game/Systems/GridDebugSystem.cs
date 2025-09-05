@@ -1,6 +1,6 @@
 using Hamaze.Engine.Core;
 
-namespace Hamaze.Game.Scenes;
+namespace Hamaze.Game.Systems;
 
 public class GridDebugSystem : WorldSystem
 {
