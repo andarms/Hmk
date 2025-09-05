@@ -4,6 +4,6 @@ using Hamaze.Game.Scenes;
 
 Settings.SetTitle("Hamaze Game");
 Game.Initialize();
-SceneManager.AddScene(new PongGameScene());
-SceneManager.SwitchTo<PongGameScene>();
+SceneManager.AddScene(new TestRoomScene());
+SceneManager.SwitchTo<TestRoomScene>();
 Game.Run();

@@ -9,8 +9,10 @@ public sealed class Entity : IEntity, IReadOnlyEntity
   public Entity? Parent { get; set; } = null;
   readonly List<Entity> children = [];
   readonly List<EntitySystem> systems = [];
+  readonly List<string> tags = [];
   readonly Dictionary<string, Component> components = [];
   public IReadOnlyList<Entity> Children => children.AsReadOnly();
+  public IReadOnlyList<string> Tags => tags.AsReadOnly();
 
   public Collider Collider { get; private set; } = new EmptyCollider();
 
@@ -44,6 +46,11 @@ public sealed class Entity : IEntity, IReadOnlyEntity
   public void AddSystem(EntitySystem system)
   {
     systems.Add(system);
+  }
+
+  public void AddTag(string tag)
+  {
+    if (!tags.Contains(tag)) tags.Add(tag);
   }
 
   public void SetCollider(Collider collider)

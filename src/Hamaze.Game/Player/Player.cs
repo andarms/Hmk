@@ -13,7 +13,14 @@ public class Player
     {
       Position = position
     };
+    player.AddTag("player");
     player.AddComponent(new DynamicBody());
+    player.AddComponent(new Sprite
+    {
+      TextureName = "Sprites/TinyDungeon",
+      Source = new Rectangle(16, 160, 16, 16),
+      Anchor = new Vector2(8, 16),
+    });
     player.AddSystem(new PlayerControllerSystem());
     return player;
   }

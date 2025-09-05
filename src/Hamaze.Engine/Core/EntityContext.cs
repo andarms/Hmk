@@ -22,6 +22,7 @@ public interface IReadOnlyEntity
   Vector2 Position { get; }
   Vector2 GlobalPosition { get; }
   IReadOnlyList<Entity> Children { get; }
+  IReadOnlyList<string> Tags { get; }
   T? GetComponent<T>() where T : Component;
   T Require<T>() where T : Component;
   bool HasComponent<T>() where T : Component;

@@ -1,7 +1,7 @@
 using Hamaze.Engine.Core;
 using Hamaze.Engine.Core.Events;
 
-namespace Hamaze.Game.Pong;
+namespace Hamaze.Game.Pong.Systems;
 
 public class ScoringSystem : WorldSystem
 {
